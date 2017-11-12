@@ -18,7 +18,8 @@ class UniversalHandler:
         >>> @Handler('/', methods=['GET'])
         >>> def index_endpoint():
         >>>     return Response("lalala", status=200)
-        :param f: The function that is decorated by an instance of the Handler class.
+        :param route: The http route to the view function
+        :param methods: Methods (list of methods. for example: ["GET", "POST"] )
         :return: A decorator for preprocessing and postprocessing data going in and out of view functions.
         """
         def decorator(f):
