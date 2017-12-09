@@ -1,8 +1,9 @@
-from flask import Flask, g, request, Response
+from flask import Flask, g, request, Response, render_template
 from flask_cors import CORS
 from .universal_handler import UniversalHandler
+from time import time
 
-app = Flask(__name__)
+app = Flask(__name__, template_folder='templates')
 CORS(app)
 Handler = UniversalHandler(app)
 
@@ -20,3 +21,8 @@ def index_get():
 @Handler('/content', methods=['GET'])
 def content_get():
     return dict(server=['is', 'working'])
+
+
+@Handler('/template_test', methods=['GET'])
+def template_test_get():
+    return render_template("template_test.html", stamp=int(time()))
