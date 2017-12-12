@@ -6,8 +6,18 @@ set -o nounset
 shopt -s globstar
 shopt -s extglob
 
-indir=teaching
-outdir=out
+if [[ $# -ne 2 ]] ; then
+    echo "Script that extracts text and creates a PNG thumbnail for each slide"
+    echo "and saves those with a new UUID filename."
+    echo
+    echo "Usage: $0 <scraped_pdf_directory> <output_directory>"
+    echo
+    echo "Example: $0 /tmp/scraped_pdfs ./out"
+    exit 1
+fi
+
+indir="$1"
+outdir="$2"
 
 rm -rf $outdir
 mkdir -p $outdir
@@ -17,7 +27,7 @@ errorfiles=()
 
 for file in $indir/**/*.pdf; do
     echo "$file"
-    url="https://www.inf.ed.ac.uk/$file"
+    url="https://www.inf.ed.ac.uk/${file#$indir/}"
 
     if ! fulltext="$(pdftotext "$file" -)"; then
         echo "error: extracting text failed"
@@ -33,7 +43,8 @@ for file in $indir/**/*.pdf; do
         uuid=$(uuidgen)
         title="${file//+(*\/|.*)} $i"
 
-        printf '{"title":"%s","url":"%s","uuid":"%s","text":"%s"}\n' "$title" "$url" "$uuid" "${text[i]}" > "$outdir/$uuid.json"
+        jq -n --arg title "$title" --arg url "$url" --arg uuid "$uuid" --arg text "${text[i]}" \
+            '{title: $title, url: $url, uuid: $uuid, text: $text}' > "$outdir/$uuid.json"
 
         mv "$tmpdir/img-$(printf "%0${#pages}d" $i).png" "$outdir/$uuid.png"
     done
