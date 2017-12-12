@@ -42,3 +42,7 @@ def template_test_get():
 def validation_get():
     print(g.args['a'], g.urla['stuff'])
     return 200
+
+
+from .indexing import *
+from .tfidf_endpoints import *

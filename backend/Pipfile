@@ -7,8 +7,9 @@ name = "pypi"
 
 [packages]
 
-Flask = "*"
-Flask-Cors = "*"
+flask = "*"
+flask-cors = "*"
+stemming = "*"
 
 
 [dev-packages]
