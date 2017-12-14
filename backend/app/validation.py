@@ -1,5 +1,6 @@
 import re
-
+import json
+import sys
 
 class ValidationException(Exception):
     def __init__(self, key, message):
@@ -9,6 +10,20 @@ class ValidationException(Exception):
 
     def __str__(self):
         return "Failed to validate %s: %s" % (self._key, self._message)
+
+
+class JSONCast:
+    def __init__(self):
+        pass
+
+    def __call__(self, value):
+        return json.loads(value)
+
+    def __str__(self):
+        return "JSON"
+
+
+raw_json = JSONCast()
 
 
 class Schema:
@@ -39,8 +54,11 @@ class Schema:
 
         try:
             value = self._cast(value)
-        except:
+        except ValueError:
             raise ValidationException(key, "Failed to cast %s as %s" % (value, str(self._cast)))
+        except Exception as e:
+            sys.stderr.write("Exception occurred in the validation casting stage: " + str(e))
+            raise e
 
         if self._length is not None:
             l = len(value)
@@ -88,6 +106,9 @@ class Schema:
                 else:
                     validated[k] = v.validate(key + ("['%s']" % k), value[k])
             return validated
+
+        if self._cast is raw_json:
+            value = self._schema.validate(key, value)
 
         if self._regex and not re.match(self._regex, value):
             raise ValidationException(key, "Value does not match the required regular expression.")

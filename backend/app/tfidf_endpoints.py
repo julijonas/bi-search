@@ -20,4 +20,3 @@ def tfidf_tf_get():
 }))
 def tfidf_df_get():
     return "DF(%s, %s) = %i"%(g.urla['token'], g.urla['doc'], df(g.urla['token'], g.urla['doc']))
-
