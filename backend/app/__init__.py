@@ -2,7 +2,8 @@ from flask import Flask, g, request, Response, render_template
 from flask_cors import CORS
 from .universal_handler import UniversalHandler
 from time import time
-from .validation import ValidationException, Schema
+from .validation import ValidationException, Schema, raw_json
+
 
 app = Flask(__name__, template_folder='templates')
 CORS(app)
@@ -35,13 +36,15 @@ def template_test_get():
 
 
 @Handler('/validation/<stuff>', methods=['GET'], args_schema=Schema(cast=dict, schema={
-    "a": Schema(cast=int, bounds=(0, 10), optional=True, default=8)
+    "a": Schema(cast=int, bounds=(0, 10), optional=True, default=8),
+    "list": Schema(cast=raw_json, schema=Schema(cast=list, schema=Schema(cast=int)))
 }), urla_schema=Schema(cast=dict, schema={
     "stuff": Schema(cast=str, length=(3, 16))
 }))
 def validation_get():
     print(g.args['a'], g.urla['stuff'])
-    return 200
+    print(g.args['list'])
+    return "All arguments passed validation"
 
 
 from .indexing import *
