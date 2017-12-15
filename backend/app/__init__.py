@@ -37,13 +37,14 @@ def template_test_get():
 
 @Handler('/validation/<stuff>', methods=['GET'], args_schema=Schema(cast=dict, schema={
     "a": Schema(cast=int, bounds=(0, 10), optional=True, default=8),
+    "b": Schema(cast=int, bounds=(0, 10), optional=True, force_present=True),
     "list": Schema(cast=raw_json, schema=Schema(cast=list, schema=Schema(cast=int)))
 }), urla_schema=Schema(cast=dict, schema={
     "stuff": Schema(cast=str, length=(3, 16))
 }))
 def validation_get():
-    print(g.args['a'], g.urla['stuff'])
-    print(g.args['list'])
+    print(g.args)
+    print(g.urla)
     return "All arguments passed validation"
 
 

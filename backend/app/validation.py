@@ -28,7 +28,7 @@ raw_json = JSONCast()
 
 class Schema:
     def __init__(self, cast, length=None, bounds=None, optional=False, nullable=False, schema=None, regex=None,
-                 values=None, default=None):
+                 values=None, default=None, force_present=False):
         self._cast = cast
         self._length = length
         self._bounds = bounds
@@ -38,12 +38,16 @@ class Schema:
         self._regex = re.compile(regex) if regex else None
         self._values = values
         self._default = default
+        self._force_present = force_present
 
     def optional(self):
         return self._optional
 
     def default(self):
         return self._default
+
+    def force_present(self):
+        return self._force_present
 
     def validate(self, key, value):
 
@@ -103,6 +107,8 @@ class Schema:
                         raise ValidationException(key + ("['%s']" % k), "Key is missing!")
                     if v.default() is not None:
                         validated[k] = v.default()
+                    elif v.force_present():
+                        validated[k] = None
                 else:
                     validated[k] = v.validate(key + ("['%s']" % k), value[k])
             return validated
