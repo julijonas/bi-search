@@ -43,7 +43,7 @@ for file in $indir/**/*.pdf; do
         uuid=$(uuidgen)
         title="${file//+(*\/|.*)} $i"
 
-        jq -n --arg title "$title" --arg content "${text[i]}" --arg url "$url" \
+        jq -n --arg title "$title" --arg content "${text[i]}" --arg url "$url#page=$i" \
             '{title: $title, content: $content, type: "slide", url: $url}' > "$outdir/$uuid.json"
 
         mv "$tmpdir/img-$(printf "%0${#pages}d" $i).png" "$outdir/$uuid.png"
