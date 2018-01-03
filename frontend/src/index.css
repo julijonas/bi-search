@@ -1,5 +1,19 @@
 body {
   margin: 0;
   padding: 0;
-  font-family: sans-serif;
+  font-family: 'Source Sans Pro', sans-serif;
+}
+
+:root {
+  --primary-color: #507fb4;
+  --secondary-color: #aa36a8;
+  --secondary-light-color: #deb0e2;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+button, input {
+  font-family: inherit;
 }

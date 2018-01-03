@@ -1,0 +1,51 @@
+.SlideFeedback {
+  margin: 1em 0;
+  display: flex;
+  align-items: center;
+}
+
+.SlideFeedback-terms, .SlideFeedback-update {
+  margin-left: 0.3em;
+  background: #fff;
+  display: inline-block;
+  min-height: 3rem;
+}
+
+.SlideFeedback-terms {
+  border: 1px solid var(--primary-color);
+  font-size: 0.8em;
+  flex: 1;
+  padding: 0.2em 0;
+}
+
+.Term {
+  display: inline-block;
+  border: 1px solid var(--secondary-color);
+  margin: 0.2em 0.2em;
+  padding: 0.4em 0.3em;
+}
+
+.Term-term {
+  font-weight: bold;
+}
+
+.Term-weight {
+  font-size: 0.8em;
+  margin: 0 0.2em;
+}
+
+.Term-remove {
+  cursor: pointer;
+  padding: 0.3em 0 0.3em 0.3em;
+}
+
+.SlideFeedback-update {
+  border: 1px solid var(--secondary-color);
+  font-size: 1.3em;
+  cursor: pointer;
+  margin-right: 0.3em;
+}
+
+.SlideFeedback-update:hover {
+  background: var(--secondary-light-color);
+}
