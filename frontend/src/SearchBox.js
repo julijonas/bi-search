@@ -84,4 +84,3 @@ class SearchBox extends React.Component {
 }
 
 export default SearchBox;
-

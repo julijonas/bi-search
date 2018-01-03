@@ -1,4 +1,8 @@
 .SearchBox {
+<<<<<<< HEAD
+=======
+
+>>>>>>> bc608fa97f7370b5853942993952a624c1c4d269
 }
 
 .SearchBox-params {
@@ -36,7 +40,10 @@
   font-size: 1.3em;
   background: #fff;
   height: 3rem;
+<<<<<<< HEAD
   border-radius: 0.15em;
+=======
+>>>>>>> bc608fa97f7370b5853942993952a624c1c4d269
 }
 
 .SearchBox-button {

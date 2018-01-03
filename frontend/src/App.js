@@ -8,7 +8,7 @@ import SlideResults from './SlideResults';
 import Pagination from './Pagination';
 
 const backendUrl = `//${window.location.hostname}:5000/`;
-  
+
 class App extends React.Component {
 
   constructor(props) {
@@ -120,14 +120,14 @@ class App extends React.Component {
         smart: smart.join(''),
       }),
     }).then((res) => {
-        return res.json()
+      return res.json()
     }).then((feedbackTerms) => {
       this.updateState({feedbackTerms});
-      }).catch(e => {
+    }).catch(e => {
       console.error("Failed: ", e);
     });
   }
-  
+
   handleFeedbackUpdate = () => {
     this.fetchResults(this.state);
   };
@@ -137,7 +137,7 @@ class App extends React.Component {
     feedbackTerms.splice(index, 1);
     this.updateState({feedbackTerms})
   };
-  
+
   render() {
     const {mode, query, feedbackTerms, smart, results, selected, page, pageCount} = this.state;
     return (
