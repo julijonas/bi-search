@@ -1,0 +1,138 @@
+//The d_weights part is not really going to be used unless you want it
+// rankings contains a sorted list of (score,doc_id) pairs
+//q_weights is a list for query terms,
+//  for each q-term:
+    // documents: the number documents it is found in
+    // doc_total = sum of its scores 
+    // doc average = doc_total / documents
+{
+    "q_weights": {
+        "This": {
+            "documents": 5,
+            "doc_average": 0.6811554787871631,
+            "doc_total": 3.4057773939358156,
+            "query": 0.2886751345948129
+        },
+        "is": {
+            "documents": 5,
+            "doc_average": 0.6811554787871631,
+            "doc_total": 3.4057773939358156,
+            "query": 0.2886751345948129
+        },
+        "best": {
+            "documents": 1,
+            "doc_average": 0.5773502691896258,
+            "doc_total": 0.5773502691896258,
+            "query": 0.2886751345948129
+        }
+    },
+    "d_weights": {
+        "1": [
+            [
+                "This",
+                0.7071067811865475
+            ],
+            [
+                "is",
+                0.7071067811865475
+            ],
+            [
+                "best",
+                0.0
+            ]
+        ],
+        "2": [
+            [
+                "This",
+                0.7071067811865475
+            ],
+            [
+                "is",
+                0.7071067811865475
+            ],
+            [
+                "best",
+                0.0
+            ]
+        ],
+        "3": [
+            [
+                "This",
+                0.7071067811865475
+            ],
+            [
+                "is",
+                0.7071067811865475
+            ],
+            [
+                "best",
+                0.0
+            ]
+        ],
+        "4": [
+            [
+                "This",
+                0.7071067811865475
+            ],
+            [
+                "is",
+                0.7071067811865475
+            ],
+            [
+                "best",
+                0.0
+            ]
+        ],
+        "5": [
+            [
+                "This",
+                0.5773502691896258
+            ],
+            [
+                "is",
+                0.5773502691896258
+            ],
+            [
+                "best",
+                0.5773502691896258
+            ]
+        ],
+        "10": [
+            [
+                "This", NaN
+            ],
+            [
+                "is", NaN
+            ],
+            [
+                "best", NaN
+            ]
+        ]
+    },
+    "rankings": [
+        [
+            0.5000000000000001,
+            5
+        ],
+        [
+            0.408248290463863,
+            1
+        ],
+        [
+            0.408248290463863,
+            2
+        ],
+        [
+            0.408248290463863,
+            3
+        ],
+        [
+            0.408248290463863,
+            4
+        ],
+        [
+            0,
+            10
+        ]
+    ]
+}

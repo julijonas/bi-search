@@ -1,0 +1,67 @@
+.SearchBox {
+
+}
+
+.SearchBox-params {
+  margin: 1em 0;
+  display: flex;
+}
+
+.SearchBox-smart {
+  margin: 1em 0;
+}
+
+.SmartLetter-select, .SearchBox-smart-info {
+  border: 1px solid var(--secondary-color);
+  background: #fff;
+  font-size: 0.8em;
+  height: 2.5em;
+}
+
+.SearchBox-smart-info {
+  cursor: help;
+  text-decoration: none;
+  margin: 0 0.6em 0 1em;
+  display: inline-block;
+  padding: 0 0.8em;
+  line-height: 2.35em;
+}
+
+.SearchBox-smart-info:hover {
+  background: var(--secondary-light-color);
+}
+
+.SearchBox-query, .SearchBox-button {
+  padding: 0.3em;
+  margin-right: 0.3em;
+  font-size: 1.3em;
+  background: #fff;
+  height: 3rem;
+}
+
+.SearchBox-button {
+  border: 1px solid var(--secondary-color);
+  cursor: pointer;
+}
+
+.SearchBox-button:hover {
+  background: var(--secondary-light-color);
+}
+
+.SearchBox-query {
+  border: 1px solid var(--primary-color);
+  margin-left: 0.3em;
+  flex: 1;
+  min-width: 0;
+}
+
+.SmartLetter-select {
+  margin-left: 0.6em;
+  padding: 0 0.5em;
+}
+
+.SmartLetter:nth-child(3)::after {
+  content: ".";
+  font-size: 1.2em;
+  margin-left: 0.6em;
+}

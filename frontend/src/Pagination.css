@@ -1,0 +1,25 @@
+.Pagination {
+  clear: both;
+  padding: 1em 0;
+}
+
+.Pagination-back, .Pagination-forward, .Pagination-current {
+  border: 1px solid var(--secondary-color);
+  background: #fff;
+  padding: 0 0.5em;
+  height: 2.5em;
+  line-height: 2.4em;
+  margin: 0 0.3em;
+  font-size: 0.8em;
+  min-width: 2em;
+  display: inline-block;
+}
+
+.Pagination-back, .Pagination-forward {
+  border: 1px solid var(--secondary-color);
+  cursor: pointer;
+}
+
+.Pagination-back:hover, .Pagination-forward:hover {
+  background: var(--secondary-light-color);
+}

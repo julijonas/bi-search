@@ -13,6 +13,11 @@ def get_documents():
     return set.union(*generator)
 
 
+# Tf and df are the wrong way around 
+# if anyone cjanges them let me know to change mine too 
+# xx
+# -Stephanos
+
 def tf(token):
     if token not in INDEX:
         return 0
@@ -25,6 +30,11 @@ def df(token, document):
     if document not in INDEX[token]:
         return 0
     return INDEX[token][document]
+
+def tdf(token):
+    if token not in INDEX:
+        return 0
+    return len(INDEX[token])
 
 
 

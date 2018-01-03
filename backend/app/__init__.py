@@ -1,7 +1,10 @@
+from time import time
+
 from flask import Flask, g, request, Response, render_template
 from flask_cors import CORS
+
 from .universal_handler import UniversalHandler
-from time import time
+from .tfidf import tfidf_test_instance
 from .validation import ValidationException, Schema, raw_json
 
 
@@ -35,6 +38,26 @@ def template_test_get():
     return render_template("template_test.html", stamp=int(time()))
 
 
+@Handler('/tfidf_test', methods=['GET'])
+def tfidf_test_get():
+    # example query :
+        # http://127.0.0.1:5000/tfidf_test?q=This%20is%20best&smart=lncLnc
+    # crate test instance
+    # i,test_documents = tfidf_test_instance(False)
+    
+    # example query with json inputs:
+    # http://127.0.0.1:5000/tfidf_test?q=This%20document%20is%20a%20sample%20file&smart=ltcLnc
+
+    # Create normal instance -> read from real the index
+    i,test_documents = tfidf_test_instance(True)
+    
+    # Get parameters
+    query = request.args.get("q")
+    smart = request.args.get("smart")
+    # Return dict as json
+    return json.dumps(i.search(query,smart))
+
+
 @Handler('/validation/<stuff>', methods=['GET'], args_schema=Schema(cast=dict, schema={
     "a": Schema(cast=int, bounds=(0, 10), optional=True, default=8),
     "b": Schema(cast=int, bounds=(0, 10), optional=True, force_present=True),
@@ -50,3 +73,4 @@ def validation_get():
 
 from .indexing import *
 from .tfidf_endpoints import *
+from .query_endpoints import *

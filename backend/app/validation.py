@@ -116,7 +116,7 @@ class Schema:
         if self._cast is raw_json:
             value = self._schema.validate(key, value)
 
-        if self._regex and not re.match(self._regex, value):
+        if self._regex and not re.fullmatch(self._regex, value):
             raise ValidationException(key, "Value does not match the required regular expression.")
 
         return value
