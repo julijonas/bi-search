@@ -13,6 +13,9 @@ CORS(app)
 Handler = UniversalHandler(app)
 
 
+SMART_SCHEMA = Schema(cast=str, regex='([nlabL][ntp][ncub]){2}', optional=True, default='lncltc')
+
+
 @app.errorhandler(ValidationException)
 def validation_error_handler(e):
     return Response(render_template('400.html', message=str(e)), status=400)
@@ -38,7 +41,10 @@ def template_test_get():
     return render_template("template_test.html", stamp=int(time()))
 
 
-@Handler('/tfidf_test', methods=['GET'])
+@Handler('/tfidf_test', methods=['GET'], args_schema=Schema(cast=dict, schema={
+    "q": Schema(cast=str, length=(3,128)),
+    "smart": SMART_SCHEMA
+}))
 def tfidf_test_get():
     # example query :
         # http://127.0.0.1:5000/tfidf_test?q=This%20is%20best&smart=lncLnc
@@ -50,12 +56,9 @@ def tfidf_test_get():
 
     # Create normal instance -> read from real the index
     i,test_documents = tfidf_test_instance(True)
-    
-    # Get parameters
-    query = request.args.get("q")
-    smart = request.args.get("smart")
+
     # Return dict as json
-    return json.dumps(i.search(query,smart))
+    return json.dumps(i.search(g.args['q'], g.args['smart']))
 
 
 @Handler('/validation/<stuff>', methods=['GET'], args_schema=Schema(cast=dict, schema={
