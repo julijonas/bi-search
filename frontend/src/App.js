@@ -161,7 +161,7 @@ class App extends React.Component {
             </div>
           ) : results.length && mode === 'pages' ? (
               <div>
-                <PageResults results={results} selected={selected} onSelect={this.handleSlideSelect}/>
+                <PageResults results={results}/>
                 <Pagination page={page} pageCount={pageCount} onChange={this.handleParamChange}/>
               </div>
             ) : null }

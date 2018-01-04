@@ -1,11 +1,6 @@
 import React from 'react';
-import "./PageResults.css";
-
-const WordScore = ({wordscore}) => (
-  <div className="WordScore">
-    <p>Word: {wordscore.split(',')[0]} Score: {wordscore.split(',')[1]}</p>
-  </div>
-);
+import './PageResults.css';
+import WordScorePanel from './WordScorePanel';
 
 const Page = ({data}) => (
   <div className="Page" data-uuid={data.uuid}>
@@ -13,21 +8,15 @@ const Page = ({data}) => (
       <div className="Page-title">{data.title}</div>
       <div className="Page-url">{data.url}</div>
       <div className="Page-content">{data.content}</div>
-   </a>
-   {data.tfidf.map(function(result){
-       return <WordScore wordscore={result} key={result.split(',')[0]}/>
-   })} 
+    </a>
+    <WordScorePanel results={data.tfidf} isOpened={false} />
   </div>
 );
 
 class PageResults extends React.Component {
 
-  handleSelect = ({target}) => {
-    this.props.onSelect(target.parentElement.dataset.uuid);
-  };
-
   render() {
-    const {results, selected} = this.props;
+    const {results} = this.props;
     return (
       <div className="PageResults">
         {results.map((data) => (
