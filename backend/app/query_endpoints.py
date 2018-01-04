@@ -22,6 +22,7 @@ def search_get():
     results = [
         dict(
             uuid = uuid,
+            tfidf = ['word1,1.2', 'word2,3.2'],
             score = score,
             title = uuid,
             content = 'Text here with highlights',

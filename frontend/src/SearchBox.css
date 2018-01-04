@@ -37,6 +37,7 @@
   font-size: 1.3em;
   background: #fff;
   height: 3rem;
+  border-radius: 0.15em;
 }
 
 .SearchBox-button {

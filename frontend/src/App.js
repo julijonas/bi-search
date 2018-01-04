@@ -2,6 +2,7 @@ import React from 'react';
 import logo from './logo.svg';
 import './App.css';
 import SearchBox from './SearchBox';
+import PageResults from './PageResults';
 import SlideFeedback from './SlideFeedback';
 import SlideResults from './SlideResults';
 import Pagination from './Pagination';
@@ -158,7 +159,12 @@ class App extends React.Component {
               <SlideResults results={results} selected={selected} onSelect={this.handleSlideSelect}/>
               <Pagination page={page} pageCount={pageCount} onChange={this.handleParamChange}/>
             </div>
-          ) : null}
+          ) : results.length && mode === 'pages' ? (
+              <div>
+                <PageResults results={results}/>
+                <Pagination page={page} pageCount={pageCount} onChange={this.handleParamChange}/>
+              </div>
+            ) : null }
         </div>
       </div>
     );
@@ -166,3 +172,4 @@ class App extends React.Component {
 }
 
 export default App;
+

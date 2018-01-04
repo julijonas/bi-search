@@ -6,7 +6,7 @@ const Slide = ({data, selected, onSelect}) => (
     <a className="Slide-selection" onClick={onSelect}>
       {selected ? "−" : "+"}
     </a>
-    <a className="Slide-link" href={data.url}>
+    <a className="Slide-link" href={data.url} target="_blank">
       <img className="Slide-thumb" src={data.thumb} alt={data.title}/>
       <div className="Slide-score">{data.score.toFixed(3)}</div>
       <div className="Slide-title">{data.title}</div>
