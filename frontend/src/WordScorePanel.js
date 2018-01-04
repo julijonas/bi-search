@@ -52,4 +52,3 @@ class WordScorePanel extends React.Component {
 }
 
 export default WordScorePanel;
-

@@ -36,6 +36,7 @@ class ProximityIndex():
     """
     Input is a list of tuples of the form:
         [ (document_id1 , ["word1",word2",..] ) ,  (document_id2 , ["word1",word2",..] ), ...]
+
     the words should already be stemmed and cleaned with the tokenizer
         
     Indexes the documents for proximity search.

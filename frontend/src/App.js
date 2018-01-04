@@ -46,7 +46,7 @@ class App extends React.Component {
       this.setState(state);
     };
   }
-  
+
   handleParamChange = (params, performQuery) => {
     if (performQuery) {
       params = {selected: [], feedbackTerms: [], ...params,
@@ -62,7 +62,7 @@ class App extends React.Component {
   updateTitle({query}) {
     window.document.title = (query ? `${query} - ` : '') + 'Informatics Search';
   }
-  
+
   updateState(changes) {
     // Save state both in React and history
     window.history.replaceState({...this.state, ...changes}, '', null);
