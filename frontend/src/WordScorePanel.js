@@ -18,7 +18,6 @@ class WordScorePanel extends React.Component {
      this.state = {
        isOpened: this.props.isOpened
      };
-
      this.handleChange = this.handleChange.bind(this);
   }
 
