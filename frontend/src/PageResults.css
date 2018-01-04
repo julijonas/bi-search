@@ -28,34 +28,6 @@
   color: var(--primary-color);
 }
 
-.Page-selection {
-  float: right;
-  font-size: 1.6em;
-  font-weight: bold;
-  background: rgba(0, 163, 0, 0.57);
-  color: #fff;
-  width: 2em;
-  height: 1.5em;
-  text-align: center;
-  display: block;
-  line-height: 1.3em;
-  margin: 1px;
-  cursor: pointer;
-}
-
-.Page-selection:hover {
-  background: rgba(0, 163, 0, 1);
-}
-
-.Page-selected .Slide-selection {
-  background: rgba(163, 9, 0, 0.57);
-  height: 100%;
-}
-
-.Page-selected .Slide-selection:hover {
-  background: rgba(163, 9, 0, 1);
-}
-
 .Page-score {
   font-size: 0.8em;
   color: #000;
