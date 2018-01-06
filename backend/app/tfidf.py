@@ -11,10 +11,10 @@ import itertools
 import time
 # import numpy as np
 # import re
+from tools.ttdstokenizer import tokenize
 from .indexing import df as df_
 from .indexing import tf as tf_
 from .indexing import get_documents
-
 
 
 inputs = [(1,"This is text number 1".split()),
@@ -23,13 +23,6 @@ inputs = [(1,"This is text number 1".split()),
 (4,"This is even much more elaborater that the rest text".split()),
 (5,"This is most definitely my best one yet".split()),
 (10,"Random words")]
-#
-# 
-# 
-# This need to be replace with the indexing one? 
-def tokenize_string(s):
-    return s.split()
-
 
 
 class ProximityIndex():
@@ -116,7 +109,7 @@ class ProximityIndex():
         return tf * df 
     
     def score(self,query,document,t="ltc"):
-        query_terms = set(tokenize_string(query))
+        query_terms = set(tokenize(query))
         # print (query_terms)
         if self.from_json:
             intersection = set([x for x in query_terms if df_(x,document) != 0])
@@ -178,7 +171,7 @@ class ProximityIndex():
 
         return scores,scores2
     def cosin_score(self,query,document,T="ltclnc"):
-        query_terms = (tokenize_string(query))
+        query_terms = tokenize(query)
 
         qi_scores,qweights = self.score_query(query_terms,T[3:])
         di_scores,dweights =  self.score_documents(query_terms,document,T[:3])

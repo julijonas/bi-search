@@ -9,9 +9,9 @@ name = "pypi"
 
 flask = "*"
 flask-cors = "*"
-stemming = "*"
 numpy = "*"
 scipy = "*"
+pystemmer = "*"
 
 
 [dev-packages]
