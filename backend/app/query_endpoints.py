@@ -46,7 +46,6 @@ def search_get():
            )
            for score, uuid in sorted_scores[page * RESULTS_PER_PAGE:(page + 1) * RESULTS_PER_PAGE]
        ]
-        print (results)
     return {
         'pageCount': num_results // RESULTS_PER_PAGE + (num_results % RESULTS_PER_PAGE > 0),
         'results': results,
