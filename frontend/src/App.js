@@ -59,6 +59,19 @@ class App extends React.Component {
     this.setState(params);
   };
 
+  handleSearchChange = (params, performQuery) => {
+    if (performQuery) {
+      params = {selected: [], feedbackTerms: [], ...params,
+        query: (params.query || this.state.query).trim(),
+        page: 0};
+      const state = {...this.state, ...params};
+      this.fetchResults(state);
+      this.updateTitle(state);
+      window.history.pushState(state, '', `/${state.mode}/${state.query}`);
+    }
+    this.setState(params);
+  };
+
   updateTitle({query}) {
     window.document.title = (query ? `${query} - ` : '') + 'Informatics Search';
   }
@@ -150,7 +163,7 @@ class App extends React.Component {
           </a>
         </header>
         <div className="App-content">
-          <SearchBox query={query} smart={smart} onChange={this.handleParamChange}/>
+          <SearchBox query={query} smart={smart} onChange={this.handleSearchChange}/>
           {results.length && mode === 'slides' ? (
             <div>
               {feedbackTerms.length ? (
