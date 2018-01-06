@@ -40,7 +40,7 @@ def search_query(query, smart):
 def feedback_terms(query, docs, smart):
     index = ProximityIndex(None)
 
-    query_tokens = [token for _, _, token in tokenize(query)]
+    query_tokens = list(tokenize(query, True))
     original_query = dict(index.score_query(query_tokens, smart[3:])[1])
 
     docs = list(docs)
