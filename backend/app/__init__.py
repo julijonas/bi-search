@@ -79,3 +79,4 @@ def validation_get():
 from .indexing import *
 from .tfidf_endpoints import *
 from .query_endpoints import *
+from .highlighting import *
