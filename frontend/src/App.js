@@ -25,7 +25,7 @@ class App extends React.Component {
 
     // Restore history.state or initialize from URL or from scratch
     this.state = window.history.state || {
-      mode: 'pages' || 'slides',
+      mode: mode,
       query: query || '',
       feedbackTerms: [],
       smart: 'ltclnc'.split(''),
