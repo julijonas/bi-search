@@ -14,7 +14,7 @@ stemmer = Stemmer.Stemmer('english')
 cache = {}
 
 
-def tokenize(string):
+def tokenize(string, simple=False):
     """
     Method is a generator of tokens found in the provided string.
     :param string: Query string
@@ -27,4 +27,7 @@ def tokenize(string):
         if tok not in stop_words:
             if tok not in cache:
                 cache[tok] = stemmer.stemWord(tok)
-            yield m.start(), len(tok), cache[tok]
+            if simple:
+                yield cache[tok]
+            else:
+                yield m.start(), len(tok), cache[tok]

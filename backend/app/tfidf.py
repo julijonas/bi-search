@@ -109,7 +109,7 @@ class ProximityIndex():
         return tf * df 
     
     def score(self,query,document,t="ltc"):
-        query_terms = set(tokenize(query))
+        query_terms = set(tokenize(query, True))
         # print (query_terms)
         if self.from_json:
             intersection = set([x for x in query_terms if df_(x,document) != 0])
@@ -129,7 +129,7 @@ class ProximityIndex():
         
         if t[0]== "a":
             tf_norm = np.max([self.tf(term,document,"n") for term in set(query_terms)])
-        print ("tfnorm",tf_norm)
+
         norm = 1
         df_norm = 1
         if t[2]== "c":
@@ -171,7 +171,7 @@ class ProximityIndex():
 
         return scores,scores2
     def cosin_score(self,query,document,T="ltclnc"):
-        query_terms = tokenize(query)
+        query_terms = list(tokenize(query, True))
 
         qi_scores,qweights = self.score_query(query_terms,T[3:])
         di_scores,dweights =  self.score_documents(query_terms,document,T[:3])
