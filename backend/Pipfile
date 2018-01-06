@@ -11,6 +11,7 @@ flask = "*"
 flask-cors = "*"
 stemming = "*"
 numpy = "*"
+scipy = "*"
 
 
 [dev-packages]
