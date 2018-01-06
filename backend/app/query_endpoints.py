@@ -3,7 +3,7 @@ from .rocchio import search_query, feedback_terms
 from .indexing import slides_index
 
 
-RESULTS_PER_PAGE = 20
+RESULTS_PER_PAGE = 18
 
 
 @Handler('/q/search', methods=['POST'], data_schema=Schema(cast=dict, schema={
@@ -25,7 +25,7 @@ def search_get():
        results = [
            dict(
                uuid = uuid,
-               tfidf = ['word1,1.2', 'word2,3.2'],
+               tfidf = {'word1': 1.2, 'word2': 3.2},
                score = score,
                title = uuid,
                content = 'Text here with highlights',

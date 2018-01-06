@@ -2,11 +2,11 @@ import React from 'react';
 import Collapse from 'react-collapse';
 import './WordScorePanel.css';
 
-const WordScore = ({wordscore}) => (
+const WordScore = ({word, score}) => (
    <p className="Box">
-     <div className="PercentageBox" style={{width: '' + wordscore.split(',')[1]*10 + '%'}}>
-      <div className="Word">{wordscore.split(',')[0]}:</div> 
-      <div className="Score">{wordscore.split(',')[1]}</div>
+     <div className="PercentageBox" style={{width: '' + score*10 + '%'}}>
+      <div className="Word">{word}:</div>
+      <div className="Score">{score}</div>
      </div>
    </p>
 );
@@ -40,8 +40,8 @@ class WordScorePanel extends React.Component {
       
            <Collapse isOpened={isChecked} fixedHeight={results.length*36} >
               <div className="WordWithScore">
-                  {results.map(function(result){
-                     return <WordScore wordscore={result} key={result.split(',')[0]} />
+                  {Object.keys(results).map(function(key, index){
+                     return <WordScore word={key} score={results[key]} key={key} />
                   })}
               </div>
            </Collapse>
