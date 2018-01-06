@@ -19,7 +19,7 @@ def search_get():
     mode = g.data['mode']
     page = g.data['page']
     scores = search_query(g.data['query'], g.data['smart'])
-    sorted_scores = sorted(((score, uuid) for score, uuid in scores ), reverse=True)
+    sorted_scores = sorted(((score, uuid) for score, uuid in scores if score > 0), reverse=True)
     num_results = len(sorted_scores)
     if mode == 'pages':
        results = [
