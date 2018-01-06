@@ -28,7 +28,7 @@ class WordScorePanel extends React.Component {
   render() {
     const {results, isOpened} = this.props;
     const isChecked = this.state.isOpened;
-    return (
+    return results ? (
         <div className="WordScore">
            <label className="label">
               <input className="input"
@@ -46,7 +46,7 @@ class WordScorePanel extends React.Component {
               </div>
            </Collapse>
         </div>
-    )
+    ) : null
   }
 }
 

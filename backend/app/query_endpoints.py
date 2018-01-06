@@ -6,6 +6,7 @@ RESULTS_PER_PAGE = 20
 
 
 @Handler('/q/search', methods=['POST'], data_schema=Schema(cast=dict, schema={
+    'mode': Schema(cast=str, length=(4,7)),
     'query': Schema(cast=str, length=(3, 100)),
     'smart': SMART_SCHEMA,
     'page': Schema(cast=int, bounds=(0, 100))
@@ -20,7 +21,7 @@ def search_get():
     sorted_scores = sorted(((score, uuid) for score, uuid in scores if score > 0), reverse=True)
     num_results = len(sorted_scores)
 
-    if mode === 'pages':
+    if mode == 'pages':
        results = [
            dict(
                uuid = uuid,
@@ -33,7 +34,7 @@ def search_get():
            for score, uuid in sorted_scores[page * RESULTS_PER_PAGE:(page + 1) * RESULTS_PER_PAGE]
        ]
 
-    elif mode === 'slides':
+    elif mode == 'slides':
         results = [
            dict(
                uuid = uuid,
