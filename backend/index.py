@@ -1,5 +1,8 @@
 import os
 import argparse
+import sys
+
+sys.path.append("tools")
 
 parser = argparse.ArgumentParser(description='Build the inverted index.')
 
