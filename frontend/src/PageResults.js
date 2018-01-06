@@ -7,7 +7,7 @@ const Page = ({data}) => (
     <a className="Page-link" href={data.url} target="_blank"> 
       <div className="Page-title">{data.title}</div>
       <div className="Page-url">{data.url}</div>
-      <div className="Page-content">{data.content}</div>
+      <div className="Page-content">{data.preview.preview}</div>
     </a>
     <WordScorePanel results={data.tfidf} isOpened={false} />
   </div>
