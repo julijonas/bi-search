@@ -25,7 +25,7 @@ class App extends React.Component {
 
     // Restore history.state or initialize from URL or from scratch
     this.state = window.history.state || {
-      mode: mode || 'slides',
+      mode: 'pages' || 'slides',
       query: query || '',
       feedbackTerms: [],
       smart: 'ltclnc'.split(''),
@@ -69,7 +69,7 @@ class App extends React.Component {
     this.setState(changes);
   }
 
-  fetchResults({query, feedbackTerms, smart, page}) {
+  fetchResults({mode, query, feedbackTerms, smart, page}) {
     fetch(`${backendUrl}q/search`, {
       method: 'POST',
       headers: {
@@ -77,6 +77,7 @@ class App extends React.Component {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
+        mode: mode,
         query: [query, ...feedbackTerms.map(({term}) => term)].join(' '),
         smart: smart.join(''),
         page: page,
