@@ -3,7 +3,7 @@ from .rocchio import search_query, feedback_terms
 from .indexing import slides_index
 
 
-RESULTS_PER_PAGE = 20
+RESULTS_PER_PAGE = 18
 
 
 @Handler('/q/search', methods=['POST'], data_schema=Schema(cast=dict, schema={
@@ -19,7 +19,7 @@ def search_get():
     mode = g.data['mode']
     page = g.data['page']
     scores = search_query(g.data['query'], g.data['smart'])
-    sorted_scores = sorted(((score, uuid) for score, uuid in scores if score > 0), reverse=True)
+    sorted_scores = sorted(((score, uuid) for score, uuid in scores ), reverse=True)
     num_results = len(sorted_scores)
     if mode == 'pages':
        results = [
