@@ -93,3 +93,4 @@ def build_index(in_dir, out_dir, silent=False):
             # if i > 10: break
             # i+=1
     slides.dump(out_dir, "slides")
+    pages.dump(out_dir, "pages")

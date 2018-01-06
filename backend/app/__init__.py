@@ -6,6 +6,7 @@ from flask_cors import CORS
 from .universal_handler import UniversalHandler
 from .tfidf import tfidf_test_instance
 from .validation import ValidationException, Schema, raw_json
+from .indexing import slides_index
 
 
 app = Flask(__name__, template_folder='templates')
