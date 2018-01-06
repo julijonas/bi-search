@@ -9,7 +9,7 @@ const Page = ({data}) => (
       <div className="Page-url">{data.url}</div>
       <div className="Page-content">{data.content}</div>
     </a>
-       <WordScorePanel results={data.tfidf} isOpened={false} />
+    <WordScorePanel results={data.tfidf} isOpened={false} />
   </div>
 );
 
