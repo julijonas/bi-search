@@ -35,15 +35,16 @@ for file in $indir/**/*.pdf; do
         continue
     fi
 
-    mapfile -d $'\f' -O 1 -t text <<< "${fulltext%$'\f'}"
+    IFS=$'\f' read -d '' -r -a text <<< "${fulltext%$'\f'}" || true
     pdftoppm -png -scale-to 256 "$file" "$tmpdir/img"
     pages=${#text[@]}
 
-    for i in "${!text[@]}"; do
+    for j in "${!text[@]}"; do
+        i=$((j+1))
         uuid=$(uuidgen)
         title="${file//+(*\/|.*)} $i"
 
-        jq -n --arg title "$title" --arg content "${text[i]}" --arg url "$url#page=$i" \
+        jq -n --arg title "$title" --arg content "${text[j]}" --arg url "$url#page=$i" \
             '{title: $title, content: $content, type: "slide", url: $url}' > "$outdir/$uuid.json"
 
         mv "$tmpdir/img-$(printf "%0${#pages}d" $i).png" "$outdir/$uuid.png"
