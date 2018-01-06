@@ -1,3 +1,4 @@
+import os
 from time import time
 
 from flask import Flask, g, request, Response, render_template
@@ -9,7 +10,7 @@ from .validation import ValidationException, Schema, raw_json
 from .indexing import slides_index
 
 
-app = Flask(__name__, template_folder='templates')
+app = Flask(__name__, template_folder='templates', static_folder=os.environ['TTDS_SCRAPE_LOCATION'], static_url_path='/static')
 CORS(app)
 Handler = UniversalHandler(app)
 

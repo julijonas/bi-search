@@ -7,7 +7,7 @@ import SlideFeedback from './SlideFeedback';
 import SlideResults from './SlideResults';
 import Pagination from './Pagination';
 
-const backendUrl = `//${window.location.hostname}:5000/`;
+export const backendUrl = `//${window.location.hostname}:5000/`;
 
 class App extends React.Component {
 
