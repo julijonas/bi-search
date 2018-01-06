@@ -24,6 +24,12 @@ parser.add_argument(
     help='Where you want the inverted index files to be stored (overwrites existing files). Defaults to the value of the TTDS_INDEX_LOCATION environment variable.'
 )
 
+parser.add_argument(
+    '--silent',
+    action='store_true',
+    help='Will prevent printing in loops.'
+)
+
 args = parser.parse_args()
 
 if args.input is None:
@@ -44,4 +50,4 @@ print(args)
 
 from indexing import build_index
 
-build_index(args.input, args.output, silent=False)
+build_index(args.input, args.output, silent=args.silent)

@@ -11,6 +11,7 @@ class IndexBuilder:
     def __init__(self):
         self._tokens = set()
         self._documents = set()
+        self._metadata = dict()
         self._ii = dict()
 
     def add_to_index(self, uuid, content):
@@ -22,23 +23,26 @@ class IndexBuilder:
             tokens[token] = tokens.get(token, 0) + 1
             self._tokens.add(token)
 
+        self._metadata[uuid] = dict(url=content['url'], title=content['title'])
+
     def dump(self, out_dir, name):
         tok_nums = {tok: num for tok, num in zip(self._tokens, range(len(self._tokens)))}
         doc_nums = {doc: num for doc, num in zip(self._documents, range(len(self._documents)))}
+        nums_doc = {v: k for k, v in doc_nums.items()}
+        nums_tok = {v: k for k, v in tok_nums.items()}
 
-        print(len(tok_nums))
-        print(len(doc_nums))
+        print("Found tokens:", len(tok_nums))
+        print("Found documents:", len(doc_nums))
 
         matrix = lil_matrix((len(doc_nums), len(tok_nums)), dtype=np.uint16)
 
         print("Matrixing: ")
-        for doc in self._documents:
-            sys.stdout.write(doc)
-            sys.stdout.write(", ")
-            for tok in self._ii[doc].keys():
-                matrix[doc_nums[doc], tok_nums[tok]] = self._ii[doc][tok]
-
-        # print(matrix)
+        for doc in range(len(doc_nums)):
+            docid = nums_doc[doc]
+            for tok in range(len(tok_nums)):
+                if tok in self._ii[docid]:
+                    print(doc, tok, docid, nums_tok[tok])
+                    matrix[doc, tok] = self._ii[docid][nums_tok[tok]]
 
         with io.open(os.path.join(out_dir, name + "_tok_nums.json"), mode="w", encoding="utf-8") as f:
             f.write(json.dumps(tok_nums, ensure_ascii=False))
@@ -46,10 +50,10 @@ class IndexBuilder:
         with io.open(os.path.join(out_dir, name + "_doc_nums.json"), mode="w", encoding="utf-8") as f:
             f.write(json.dumps(doc_nums, ensure_ascii=False))
 
-        matrix = csr_matrix(matrix)
+        with io.open(os.path.join(out_dir, name + "_metadata.json"), mode="w", encoding="utf-8") as f:
+            f.write(json.dumps(self._metadata, ensure_ascii=False))
 
-        # print(matrix)
-        print(matrix[0:5, 0:5])
+        matrix = csr_matrix(matrix)
 
         save_npz(os.path.join(out_dir, name + "_ii"), matrix)
 

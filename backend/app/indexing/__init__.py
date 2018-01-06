@@ -9,6 +9,7 @@ from .inverted_index import InvertedIndex
 
 
 slides_index = InvertedIndex(os.environ['TTDS_INDEX_LOCATION'], "slides")
+pages_index = InvertedIndex(os.environ['TTDS_INDEX_LOCATION'], "pages")
 
 
 get_documents = slides_index.get_documents
