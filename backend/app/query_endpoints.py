@@ -1,6 +1,7 @@
 from . import Handler, Schema, g, SMART_SCHEMA
 from .rocchio import search_query, feedback_terms
 from .indexing import slides_index
+from . import get_preview
 
 
 RESULTS_PER_PAGE = 18
@@ -28,7 +29,7 @@ def search_get():
                tfidf = {'word1': 1.2, 'word2': 3.2},
                score = score,
                title = uuid,
-               content = 'Text here with highlights',
+               preview = get_preview(uuid, g.data['query']),
                url = 'http://example.com'
            )
            for score, uuid in sorted_scores[page * RESULTS_PER_PAGE:(page + 1) * RESULTS_PER_PAGE]
