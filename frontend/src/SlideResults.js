@@ -1,5 +1,6 @@
 import React from 'react';
 import "./SlideResults.css";
+import { backendUrl } from './App';
 
 const Slide = ({data, selected, onSelect}) => (
   <div className={"Slide" + (selected ? " Slide-selected" : "")} data-uuid={data.uuid}>
@@ -7,7 +8,7 @@ const Slide = ({data, selected, onSelect}) => (
       {selected ? "−" : "+"}
     </a>
     <a className="Slide-link" href={data.url} target="_blank">
-      <img className="Slide-thumb" src={data.thumb} alt={data.title}/>
+      <img className="Slide-thumb" src={`${backendUrl}static/${data.uuid}.png`} alt={data.title}/>
       <div className="Slide-score">{data.score.toFixed(3)}</div>
       <div className="Slide-title">{data.title}</div>
     </a>
