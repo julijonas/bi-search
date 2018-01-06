@@ -8,9 +8,9 @@ const Slide = ({data, selected, onSelect}) => (
       {selected ? "−" : "+"}
     </a>
     <a className="Slide-link" href={data.url} target="_blank">
-      <img className="Slide-thumb" src={`${backendUrl}static/${data.uuid}.png`} alt={data.title}/>
-      <div className="Slide-score">{data.score.toFixed(3)}</div>
       <div className="Slide-title">{data.title}</div>
+      <div className="Slide-score">{data.score.toFixed(3)}</div>
+      <img className="Slide-thumb" src={`${backendUrl}static/${data.uuid}.png`} alt={data.title}/>
     </a>
   </div>
 );
