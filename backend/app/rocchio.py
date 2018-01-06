@@ -1,6 +1,7 @@
-from .tfidf import ProximityIndex, tokenize_string
-from .indexing import INDEX
-
+import numpy as np
+from .tfidf import ProximityIndex
+from tools.ttdstokenizer import tokenize
+from . import slides_index
 
 original_weight = 0.4
 related_weight = 0.3
@@ -39,17 +40,20 @@ def search_query(query, smart):
 def feedback_terms(query, docs, smart):
     index = ProximityIndex(None)
 
-    query_tokens = tokenize_string(query)
+    query_tokens = [token for _, _, token in tokenize(query)]
     original_query = dict(index.score_query(query_tokens, smart[3:])[1])
 
-    related_terms = set()
-    for term, occurences in INDEX.items():
-        for doc in occurences.keys():
-            if doc in docs:
-                related_terms.add(term)
-                break
+    docs = list(docs)
+    small_index = slides_index[docs, :]
+    occurrences = small_index.sum(axis=0)
+    print(occurrences.shape)
+    occurring = np.argsort(occurrences)[0,-10:].A1
 
-    related_documents = [dict(index.score_documents(related_terms, doc, smart[:3])[1]) for doc in docs]
+    occurring = slides_index.nums_to_toks(occurring)
+
+
+
+    related_documents = [dict(index.score_documents(occurring, doc, smart[:3])[1]) for doc in docs]
     modified_query = rocchio(original_query, related_documents)
 
     for token in query_tokens:

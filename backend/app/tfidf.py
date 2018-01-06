@@ -174,7 +174,7 @@ class ProximityIndex():
             norm = 1 if norm == np.inf else norm
         scores = [x / tf_norm * norm * df_norm for x in scores]
         for x in scores2:
-            x[1] = x[1]/tf_norm * norm * df_norm 
+            x[1] = x[1]/tf_norm * norm * df_norm
 
         return scores,scores2
     def cosin_score(self,query,document,T="ltclnc"):
@@ -183,20 +183,20 @@ class ProximityIndex():
         qi_scores,qweights = self.score_query(query_terms,T[3:])
         di_scores,dweights =  self.score_documents(query_terms,document,T[:3])
         # print (qi_scores,qi_scores)
-        
+
         assert len(qi_scores) == len(di_scores)
         s = np.dot(np.array(qi_scores),np.array(di_scores))
         norm = 1 #/ (np.linalg.norm(qi_scores) * np.linalg.norm(di_scores))
-        v = s * norm 
+        v = s * norm
         if not np.isnan(v): return v,dweights,qweights
         return 0,dweights,qweights
-    
+
     def ranked_search_cos(self,term,SMART="ltclnc"):
         scores = [(self.cosin_score(term,d,SMART),d) for d in self.doc_ids]
         sorted_scores =  sorted(scores,reverse=True,key=lambda x: x[0][0])
         rankings = [(x[0][0],x[1]) for x in sorted_scores]
         return rankings, sorted_scores
-    
+
     def search(self,term,SMART="ltcLnc"):
         
         rankings, sorted_with_w = self.ranked_search_cos(term,SMART)
