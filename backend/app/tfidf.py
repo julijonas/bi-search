@@ -215,7 +215,7 @@ class ProximityIndex():
         r = {
             "rankings":rankings,
             "q_weights":q_weights,
-            # "d_weights":d_weights
+            "d_weights":d_weights
         }
 
         return r

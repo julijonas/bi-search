@@ -60,7 +60,7 @@ def tfidf_test_get():
     i,test_documents = tfidf_test_instance(True)
 
     # Return dict as json
-    return json.dumps(i.search(g.args['q'], g.args['smart']))
+    return i.search(g.args['q'], g.args['smart'])
 
 
 @Handler('/validation/<stuff>', methods=['GET'], args_schema=Schema(cast=dict, schema={
