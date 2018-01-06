@@ -51,13 +51,12 @@ def feedback_terms(query, docs, smart):
 
     occurring = slides_index.nums_to_toks(occurring)
 
-
-
     related_documents = [dict(index.score_documents(occurring, doc, smart[:3])[1]) for doc in docs]
     modified_query = rocchio(original_query, related_documents)
 
     for token in query_tokens:
-        del modified_query[token]
+        if token in modified_query:
+            del modified_query[token]
 
     return modified_query
 
