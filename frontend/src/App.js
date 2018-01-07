@@ -84,14 +84,13 @@ class App extends React.Component {
   }
 
   fetchResults({mode, query, feedbackTerms, smart, page}) {
-    fetch(`${backendUrl}q/search`, {
+    fetch(`${backendUrl}search/${mode}`, {
       method: 'POST',
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        mode: mode,
         query: [query, ...feedbackTerms.map(({term}) => term)].join(' '),
         smart: smart.join(''),
         page: page,
@@ -123,7 +122,7 @@ class App extends React.Component {
   };
 
   fetchFeedbackTerms({query, selected, smart}) {
-    fetch(`${backendUrl}q/feedback`, {
+    fetch(`${backendUrl}search/feedback`, {
       method: 'POST',
       headers: {
         Accept: 'application/json',

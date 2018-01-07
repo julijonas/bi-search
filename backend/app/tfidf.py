@@ -12,9 +12,9 @@ import time
 # import numpy as np
 # import re
 from tools.ttdstokenizer import tokenize
-from .indexing import df as df_
-from .indexing import tf as tf_
-from .indexing import get_documents
+from .inverted_index import df as df_
+from .inverted_index import tf as tf_
+from .inverted_index import get_documents
 
 
 inputs = [(1,"This is text number 1".split()),
@@ -31,7 +31,7 @@ class ProximityIndex():
         [ (document_id1 , ["word1",word2",..] ) ,  (document_id2 , ["word1",word2",..] ), ...]
 
     the words should already be stemmed and cleaned with the tokenizer
-        
+
     Indexes the documents for proximity search.
     """
     def ld(self):
@@ -53,9 +53,9 @@ class ProximityIndex():
         self.index = index
 
         now = time.time()
-        print("INDEXING:: It has been {0} seconds since the loop started".format(now - program_starts)) 
+        print("INDEXING:: It has been {0} seconds since the loop started".format(now - program_starts))
 
-        
+
     def tf(self,term,document,t="n",index=(None,None)):
         if not index[0] and self.from_json:
             tf = df_(term,document)
@@ -74,7 +74,7 @@ class ProximityIndex():
             return 1 if tf > 0 else 0
         if t=="L":
             return 1 + np.log10(tf)
-        return 
+        return
 
     def idf(self,term,t="t",index=(None,None)):
         if not index[0] and self.from_json:
@@ -99,15 +99,15 @@ class ProximityIndex():
         return len(self.index[term].keys())
 
     def cf(self,term):
-        return sum([self.tf(term,x) for x in self.index[term].keys()]) 
+        return sum([self.tf(term,x) for x in self.index[term].keys()])
 
-    
+
     def w(self,term,document,t="ltc"):
         tf = self.tf(term,document,t[0])
         df = self.idf(term,t[1])
         N = len(self.doc_ids)
-        return tf * df 
-    
+        return tf * df
+
     def score(self,query,document,t="ltc"):
         query_terms = set(tokenize(query, True))
         # print (query_terms)
@@ -117,16 +117,16 @@ class ProximityIndex():
             intersection = set([x for x in query_terms if self.index[x].get(document) != None])
 
         return sum([self.w(x,document,t) for x in intersection])
-    
-    
+
+
     def score_documents(self,query_terms,document,t="ltc"):
-        
+
         scores = [self.score(term,document,t) for term in set(query_terms)]
         scores2 = [[term ,self.score(term,document,t)]   for term in set(query_terms)]
         tf_norm = 1
         if t[0]== "L":
             tf_norm =1 + np.log10(np.average([self.tf(term,document,"n") for term in set(query_terms)]))
-        
+
         if t[0]== "a":
             tf_norm = np.max([self.tf(term,document,"n") for term in set(query_terms)])
 
@@ -137,7 +137,7 @@ class ProximityIndex():
         scores = [x / tf_norm * norm * df_norm for x in scores]
 
         for x in scores2:
-            x[1] = x[1]/ tf_norm * norm * df_norm 
+            x[1] = x[1]/ tf_norm * norm * df_norm
         return scores ,scores2
 
     def score_query(self,query_terms,t="lnc"):
@@ -191,10 +191,10 @@ class ProximityIndex():
         return rankings, sorted_scores
 
     def search(self,term,SMART="ltcLnc"):
-        
+
         rankings, sorted_with_w = self.ranked_search_cos(term,SMART)
         q_weights = { k:{"query":v, "documents":[], } for k,v in sorted_with_w[0][0][2] }
-    
+
 
         d_weights = {}
         for results,doc_id in sorted_with_w:
@@ -207,11 +207,11 @@ class ProximityIndex():
 
         for k in q_weights.keys():
             doc_scores = q_weights[k]["documents"]
-            
+
             q_weights[k]["doc_total"] = np.sum(doc_scores)
             found_in_ = len(list(filter(lambda x: x>0,doc_scores)))
             q_weights[k]["documents"] = found_in_
-            q_weights[k]["doc_average"] = np.sum(doc_scores) / found_in_ 
+            q_weights[k]["doc_average"] = np.sum(doc_scores) / found_in_
         r = {
             "rankings":rankings,
             "q_weights":q_weights,
@@ -230,7 +230,7 @@ if __name__ == "__main__":
     # For now :
         # the format is ddd.qqq
         #                                 tf    idf   Norm
-        # for ddd, acceptable modes are [n,l,L][n,t,p][n,c] 
+        # for ddd, acceptable modes are [n,l,L][n,t,p][n,c]
         # for qqq, acceptable modes are [n,l,L][n][n,c]
             # for ifd only n makes sense
     # x,_ = i.ranked_search_cos("This is is","ltclnc")
