@@ -26,7 +26,7 @@ class WordScorePanel extends React.Component {
   }
 
   render() {
-    const {results} = this.props;
+    const {results, text} = this.props;
     const isChecked = this.state.isOpened;
     return results ? (
         <div className="WordScore">
@@ -35,7 +35,7 @@ class WordScorePanel extends React.Component {
                type="checkbox"
                checked={isChecked}
                onChange={this.handleChange} />
-             Show TFIDF
+             {text}
            </label>
       
            <Collapse isOpened={isChecked} fixedHeight={results.length*36} >

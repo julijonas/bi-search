@@ -16,16 +16,23 @@ const Page = ({data, preview}) => (
         textToHighlight={preview.preview}/>
       </div>
     </a>
-    <WordScorePanel results={data.tfidf} isOpened={false} />
+    <WordScorePanel results={data.tfidf} text="Show TFIDF" isOpened={false} />
+  </div>
+);
+
+const QueryWords = ({queryWeights}) => (
+  <div className="QueryWords">
+    <WordScorePanel results={queryWeights} text="Show TFIDF weights for query words" isOpened={false} />
   </div>
 );
 
 class PageResults extends React.Component {
 
   render() {
-    const {results} = this.props;
+    const {results, queryWeights} = this.props;
     return (
       <div className="PageResults">
+        <QueryWords queryWeights={queryWeights}/>
         {results.map((data) => (
           <Page key={data.uuid} data={data} preview={data.preview}/>
         ))}

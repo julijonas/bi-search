@@ -153,7 +153,7 @@ class App extends React.Component {
   };
 
   render() {
-    const {mode, query, feedbackTerms, smart, results, selected, page, pageCount} = this.state;
+    const {mode, query, feedbackTerms, smart, results, selected, page, pageCount, queryWeights} = this.state;
     return (
       <div className="App">
         <header className="App-header">
@@ -175,7 +175,7 @@ class App extends React.Component {
             </div>
           ) : results.length && mode === 'pages' ? (
               <div>
-                <PageResults results={results}/>
+                <PageResults results={results} queryWeights={queryWeights}/>
                 <Pagination page={page} pageCount={pageCount} onChange={this.handleParamChange}/>
               </div>
             ) : null }
