@@ -41,7 +41,24 @@ const smartOptions = [
 ];
 
 
+const offers = [
+  'bayes rule',
+  'dna vs rna',
+  'sql injection',
+  'apples oranges',
+  'merge sort',
+  'inverted index',
+  'map reduce',
+];
+
+
 class SearchBox extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      offer: offers[Math.floor(Math.random() * offers.length)],
+    };
+  }
 
   handleQueryChange = ({target}) => {
     this.props.onChange({query: target.value}, false);
@@ -69,7 +86,7 @@ class SearchBox extends React.Component {
         <div className="SearchBox-params">
           <input className="SearchBox-query" value={query}
                  onChange={this.handleQueryChange} onKeyPress={this.handleEnter}
-                 minLength="3" placeholder="Try: slide content"/>
+                 minLength="3" placeholder={`Try: ${this.state.offer}`}/>
           <button className="SearchBox-button" name="slides" onClick={this.handleModeChange}>Slides</button>
           <button className="SearchBox-button" name="pages" onClick={this.handleModeChange}>Pages</button>
         </div>

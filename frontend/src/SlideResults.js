@@ -10,7 +10,7 @@ const Slide = ({data, selected, onSelect}) => (
     <a className="Slide-link" href={data.url} target="_blank">
       <div className="Slide-title">{data.title}</div>
       <div className="Slide-score">{data.score.toFixed(3)}</div>
-      <img className="Slide-thumb" src={`${backendUrl}static/${data.uuid}.png`} alt={data.title}/>
+      <img className="Slide-thumb" src={`${backendUrl}static/thumbs/${data.uuid}.png`} alt={data.title}/>
     </a>
   </div>
 );

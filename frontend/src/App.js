@@ -7,7 +7,8 @@ import SlideFeedback from './SlideFeedback';
 import SlideResults from './SlideResults';
 import Pagination from './Pagination';
 
-export const backendUrl = `//${window.location.hostname}:5000/`;
+export const backendUrl = process.env.NODE_ENV === 'production' ? '/' : `//${window.location.hostname}:5000/`;
+
 
 class App extends React.Component {
 

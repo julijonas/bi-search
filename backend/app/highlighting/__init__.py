@@ -5,6 +5,7 @@ from .. import Handler, render_template, app, g
 from ..validation import Schema
 from tools.ttdstokenizer import tokenize
 
+
 def simple_highlights(content, query):
     tokens = set(tokenize(query, True))
     snippets = list()

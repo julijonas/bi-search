@@ -26,7 +26,7 @@ class WordScorePanel extends React.Component {
   }
 
   render() {
-    const {results, isOpened} = this.props;
+    const {results} = this.props;
     const isChecked = this.state.isOpened;
     return results ? (
         <div className="WordScore">
