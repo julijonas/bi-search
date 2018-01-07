@@ -111,11 +111,9 @@ class ProximityIndex:
 
         return scores,scores2
 
-    def ranked_search_cos(self,term,SMART="ltclnc"):
-        # NEw stuff here
-        query_terms = list(tokenize(term, True))
+    def score_documents(self,query_terms,SMART):
 
-        # Get all term frequencies [doc x terms]
+         # Get all term frequencies [doc x terms]
         tf_all = self._index[:,query_terms].todense()
         # apply normalizations to tf
         if SMART[0] == "l":
@@ -155,6 +153,14 @@ class ProximityIndex:
         
         # Documents tf_idf for each token
         documents_tf_idf = np.matrix(np.multiply(tf_all,df_all))
+
+        return documents_tf_idf 
+
+    def ranked_search_cos(self,term,SMART="ltclnc"):
+        # NEw stuff here
+        query_terms = list(tokenize(term, True))
+
+        documents_tf_idf = self.score_documents(query_terms,SMART)
 
         # Query Scores only calculated once
         qi_scores,qweights = self.score_query(query_terms,SMART[3:])
