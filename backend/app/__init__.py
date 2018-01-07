@@ -76,7 +76,7 @@ def validation_get():
     return "All arguments passed validation"
 
 
+from .highlighting import *
 from .indexing import *
 from .tfidf_endpoints import *
 from .query_endpoints import *
-from .highlighting import *
