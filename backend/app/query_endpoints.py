@@ -1,6 +1,6 @@
 from . import Handler, Schema, g, SMART_SCHEMA
 from .rocchio import search_query, feedback_terms
-from .indexing import slides_index
+from .indexing import slides_index, pages_index
 from . import get_preview
 
 
@@ -30,7 +30,7 @@ def search_get():
                score = score,
                title = uuid,
                preview = get_preview(uuid, g.data['query']),
-               url = 'http://example.com'
+               url = pages_index.get_url(uuid)
            )
            for score, uuid in sorted_scores[page * RESULTS_PER_PAGE:(page + 1) * RESULTS_PER_PAGE]
        ]
