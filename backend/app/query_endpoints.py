@@ -76,8 +76,4 @@ def search_feedback_post():
     """
     Retrieve most relevant terms from documents.
     """
-    term_weights = feedback_terms(g.data['query'], g.data['docs'], g.data['smart'])
-
-    sorted_term_weights = sorted(term_weights.items(), key=lambda x: x[1], reverse=True)[:10]
-
-    return [dict(term=term, weight=weight) for term, weight in sorted_term_weights]
+    return feedback_terms(g.data['query'], g.data['docs'], g.data['smart'])
