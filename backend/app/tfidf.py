@@ -104,7 +104,7 @@ class ProximityIndex:
         df_norm = 1
         if t[2]== "c":
             norm = 1/ np.linalg.norm(scores)
-            norm = 1 if norm == np.inf else norm
+            norm = 1 if norm == -np.inf else norm
         scores = [x / tf_norm * norm * df_norm for x in scores]
         for x in scores2:
             x[1] = x[1]/tf_norm * norm * df_norm
@@ -150,11 +150,24 @@ class ProximityIndex:
         if SMART[1] == "p":
             df_all = np.vstack([np.zeros_like(df_all),df_all])
             df_all = np.max(df_all,axis=0)
+
+        
+
         
         # Documents tf_idf for each token
         documents_tf_idf = np.matrix(np.multiply(tf_all,df_all))
-
-        return documents_tf_idf 
+        print (documents_tf_idf.shape)
+        norm = 1
+        if SMART[2] == "n":
+            norm = 1
+        if SMART[2] == "c":
+            d = documents_tf_idf.sum(axis=1)
+            n= np.sqrt(np.power(d,2).sum())
+            norm = n
+            if n == np.inf:
+                norm = d.max() 
+        
+        return 1.* documents_tf_idf / norm
 
     def ranked_search_cos(self,term,SMART="ltclnc"):
         # NEw stuff here
@@ -169,11 +182,12 @@ class ProximityIndex:
         # Compute scores
         cosine_scores = documents_tf_idf.dot(query_tf_if)
 
-        
+        # Sort ranks and ids
         cosine_scores = (np.array(cosine_scores)[:,0])
         sorted_scores = np.sort(cosine_scores)[::-1]
         sorted_doc_nums = np.argsort(cosine_scores)[::-1]
         
+        # Things to return
         dweights = documents_tf_idf[sorted_doc_nums,:]
 
         sorted_doc_ids = self._index.nums_to_docs(sorted_doc_nums)
