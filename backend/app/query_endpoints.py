@@ -3,9 +3,17 @@ from .rocchio import feedback_terms
 from .tfidf import search_query
 from .inverted_index import slides_index, pages_index
 from . import get_preview
-from .tfidf import tfidf_test_instance
+
 
 RESULTS_PER_PAGE = 18
+
+
+def page_count(num_results):
+    return num_results // RESULTS_PER_PAGE + (num_results % RESULTS_PER_PAGE > 0)
+
+
+def get_items(collection, page):
+    return collection[page * RESULTS_PER_PAGE:(page + 1) * RESULTS_PER_PAGE]
 
 
 @Handler('/search/pages', methods=['POST'], data_schema=Schema(cast=dict, schema={
@@ -14,30 +22,25 @@ RESULTS_PER_PAGE = 18
     'page': Schema(cast=int, bounds=(0, 100))
 }))
 def search_pages_post():
-    """
-    Query search with optional relevance feedback.
-    """
-    scores = search_query(pages_index, g.data['query'], g.data['smart'])
-    sorted_scores = sorted(((score, uuid) for score, uuid in scores if score > 0), reverse=True)
-    num_results = len(sorted_scores)
+    scores, q_weights = search_query(pages_index, g.data['query'], g.data['smart'])
 
     results = [
         dict(
-            uuid = uuid,
-            tfidf = {'word1': 0.7071067811865475, 'word2': 0.5071067811865475},
-            score = score,
-            title = pages_index.get_title(uuid),
-            preview = get_preview(uuid, g.data['query']),
-            url = pages_index.get_url(uuid)
+            uuid=uuid,
+            tfidf=d_weights,
+            score=score,
+            title=pages_index.get_title(uuid),
+            preview=get_preview(uuid, g.data['query']),
+            url=pages_index.get_url(uuid),
         )
-        for score, uuid in sorted_scores[g.data['page'] * RESULTS_PER_PAGE:(g.data['page'] + 1) * RESULTS_PER_PAGE]
+        for score, uuid, d_weights in get_items(scores, g.data['page'])
     ]
 
-    return {
-        'pageCount': num_results // RESULTS_PER_PAGE + (num_results % RESULTS_PER_PAGE > 0),
-        'queryWeights': {'queryWords1': 0.7071067811865475, 'word2': 0.5071067811865475},
-        'results': results,
-    }
+    return dict(
+        pageCount=page_count(len(scores)),
+        queryWeights=q_weights,
+        results=results,
+    )
 
 
 @Handler('/search/slides', methods=['POST'], data_schema=Schema(cast=dict, schema={
@@ -46,26 +49,21 @@ def search_pages_post():
     'page': Schema(cast=int, bounds=(0, 100))
 }))
 def search_slides_post():
-    """
-    Query search with optional relevance feedback.
-    """
-    scores = search_query(slides_index, g.data['query'], g.data['smart'])
-    sorted_scores = sorted(((score, uuid) for score, uuid in scores if score > 0), reverse=True)
-    num_results = len(sorted_scores)
+    scores, q_weights = search_query(slides_index, g.data['query'], g.data['smart'])
+
     results = [
        dict(
-           uuid = uuid,
-           score = score,
-           title = uuid,
-           content = 'Text here with highlights',
-           url = slides_index.get_url(uuid)
+           uuid=uuid,
+           score=score,
+           url=slides_index.get_url(uuid),
        )
-       for score, uuid in sorted_scores[g.data['page'] * RESULTS_PER_PAGE:(g.data['page'] + 1) * RESULTS_PER_PAGE]
+       for score, uuid, d_weights in get_items(scores, g.data['page'])
     ]
-    return {
-        'pageCount': num_results // RESULTS_PER_PAGE + (num_results % RESULTS_PER_PAGE > 0),
-        'results': results,
-    }
+
+    return dict(
+        pageCount=page_count(len(scores)),
+        results=results,
+    )
 
 
 @Handler('/search/feedback', methods=['POST'], data_schema=Schema(cast=dict, schema={
