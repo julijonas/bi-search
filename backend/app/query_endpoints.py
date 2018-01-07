@@ -26,7 +26,7 @@ def search_get():
        results = [
            dict(
                uuid = uuid,
-               tfidf = {'word1': 1.2, 'word2': 3.2},
+               tfidf = {'word1': 0.7071067811865475, 'word2': 0.5071067811865475},
                score = score,
                title = uuid,
                preview = get_preview(uuid, g.data['query']),

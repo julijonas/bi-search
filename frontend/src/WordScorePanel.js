@@ -4,9 +4,9 @@ import './WordScorePanel.css';
 
 const WordScore = ({word, score}) => (
    <p className="Box">
-     <div className="PercentageBox" style={{width: '' + score*10 + '%'}}>
+     <div className="PercentageBox" style={{width: '' + score*100 + '%'}}>
       <div className="Word">{word}:</div>
-      <div className="Score">{score}</div>
+      <div className="Score">{score.toFixed(3)}</div>
      </div>
    </p>
 );
