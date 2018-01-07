@@ -64,7 +64,7 @@ class App extends React.Component {
     if (performQuery) {
       params = {selected: [], feedbackTerms: [], ...params,
         query: (params.query || this.state.query).trim(),
-        page: 0};
+        page: 0, results: []};
       const state = {...this.state, ...params};
       this.fetchResults(state);
       this.updateTitle(state);
