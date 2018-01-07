@@ -4,7 +4,7 @@ from flask_cors import CORS
 
 
 app = Flask(__name__, template_folder='templates',
-            static_folder=os.environ['TTDS_SCRAPE_LOCATION'], static_url_path='/static/thumbs')
+            static_folder=os.path.join(os.environ['TTDS_SCRAPE_LOCATION'], "slides"), static_url_path='/static/thumbs')
 CORS(app)
 
 # Import infrastructure now that the app has been created.
