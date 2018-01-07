@@ -230,5 +230,9 @@ def tfidf_test_instance(json):
 
 def search_query(index, query, smart):
     proximity_index = ProximityIndex(index)
-    rankings, sorted_scores = proximity_index.ranked_search_cos(query, smart)
-    return rankings
+    scores, (q_weights, d_weights) = proximity_index.ranked_search_cos(query, smart)
+
+    scores = sorted(((score, uuid, d_weights[uuid]) for score, uuid in scores if score > 0), reverse=True)
+    q_weights = dict(q_weights)
+
+    return scores, q_weights
