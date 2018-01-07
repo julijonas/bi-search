@@ -29,6 +29,21 @@ raw_json = JSONCast()
 class Schema:
     def __init__(self, cast, length=None, bounds=None, optional=False, nullable=False, schema=None, regex=None,
                  values=None, default=None, force_present=False):
+        """
+        Defines a Schema to validate an object against.
+        :param cast: What to cast the object as. (Calls cast as a method, valid values are: int, str, any callable obj.)
+        :param length: Length ranges. Tuple of (min, max) ranges inclusive. None = no limit. Eg: (3, None)
+        :param bounds: Value ranges. Tuple of (min, max) values inclusive. None = no limit. Eg: (3, None)
+        :param optional: Requires the object to be present. Used for validating dictionary key values.
+        :param nullable: Allows None as a valid value of the object.
+        :param schema: What to validate inner objects as. For lists, this is just another Schema. For dicts, this is a
+            dict of schemas with keys corresponding to the inner keys of the object.
+        :param regex: Regex for string types.
+        :param values: Allowed values. Must be list or tuple.
+        :param default: Object is set to this if it is not present in the puter object. Used for dicts.
+        :param force_present: Value is set to None if it is not present in the object. Used for dicts.
+            (Can't do this with default argument, because if default=None then there is no default value)
+        """
         self._cast = cast
         self._length = length
         self._bounds = bounds
@@ -50,6 +65,12 @@ class Schema:
         return self._force_present
 
     def validate(self, key, value):
+        """
+        Validates the value against this schema.
+        :param key: What this value is. If value fails to pass validation, key will be printed out in the debug message.
+        :param value: The value to validate.
+        :return: The validated value.
+        """
 
         if value is None:
             if not self._nullable:

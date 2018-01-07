@@ -1,4 +1,3 @@
-import sys
 import os
 import json
 import io
@@ -57,7 +56,7 @@ def build_index(in_dir, out_dir, silent=False):
 
     slides = IndexBuilder()
     pages = IndexBuilder()
-    i = 0
+
     # Iterate over all subdirectories
     for dirName, subdirList, fileList in os.walk(in_dir):
 
@@ -89,7 +88,6 @@ def build_index(in_dir, out_dir, silent=False):
                         pages.add_to_index(uuid, content)
                     else:
                         print("UNKNOWN TYPE: " + content['type'])
-            # if i > 10: break
-            # i+=1
+
     slides.dump(out_dir, "slides")
     pages.dump(out_dir, "pages")

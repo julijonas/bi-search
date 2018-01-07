@@ -2,7 +2,7 @@ import os
 import io
 import json
 from .. import Handler, render_template, app, g
-from ..validation import Schema
+from .. import Schema
 from tools.ttdstokenizer import tokenize
 
 
