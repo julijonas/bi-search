@@ -8,7 +8,6 @@ const Slide = ({data, selected, onSelect}) => (
       {selected ? "−" : "+"}
     </a>
     <a className="Slide-link" href={data.url} target="_blank">
-      <div className="Slide-title">{data.title}</div>
       <div className="Slide-score">{data.score.toFixed(3)}</div>
       <img className="Slide-thumb" src={`${backendUrl}static/thumbs/${data.uuid}.png`} alt={data.title}/>
     </a>

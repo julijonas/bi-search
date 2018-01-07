@@ -58,17 +58,6 @@
   float: right;
 }
 
-.Slide-title {
-  color: #00008B;
-  margin: 0.6em 0.3em 0 0.3em;
-  text-overflow: ellipsis;
-  word-wrap: break-word;
-  overflow: hidden;
-  max-width: 100%;
-  height: 2.6em;
-  line-height: 1.3em;
-}
-
 .Slide-thumb {
   display: block;
   margin: auto;
