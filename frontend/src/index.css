@@ -9,6 +9,7 @@ body {
   --secondary-color: #aa36a8;
   --secondary-light-color: #deb0e2;
   --box-border-color: #B0C4DE;
+  --content-text-color: #696969;
 }
 
 * {
