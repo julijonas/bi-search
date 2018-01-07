@@ -18,7 +18,7 @@ def simple_highlights(content, query):
 
 
 def get_preview(uuid, query):
-    path = os.path.join(app.static_folder, "pages", uuid + ".json")
+    path = os.path.join(os.environ['TTDS_SCRAPE_LOCATION'], "pages", uuid + ".json")
     if os.path.exists(path):
         with io.open(path, 'r', encoding='utf-8') as f:
             s = json.loads(f.read())['content']

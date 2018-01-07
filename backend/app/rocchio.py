@@ -31,35 +31,30 @@ def rocchio(original_query, related_docs):
                multiply(add_all(related_docs), related_weight / len(related_docs)))
 
 
-def search_query(query, smart):
-    index = ProximityIndex(None)
-    rankings, sorted_scores = index.ranked_search_cos(query, smart)
-    return rankings
-
-
 def feedback_terms(query, docs, smart):
-    index = ProximityIndex(None)
+    # index = ProximityIndex(slides_index)
+    #
+    # query_tokens = list(tokenize(query, True))
+    # original_query = dict(index.score_query(query_tokens, smart[3:])[1])
+    #
+    # docs = list(docs)
+    # small_index = slides_index[docs, :]
+    # occurrences = small_index.sum(axis=0)
+    # print(occurrences.shape)
+    # occurring = np.argsort(occurrences)[0,-10:].A1
+    #
+    # occurring = slides_index.nums_to_toks(occurring)
+    #
+    # related_documents = [dict(index.score_documents(occurring, doc, smart[:3])[1]) for doc in docs]
+    # # related_documents = docs
+    # modified_query = rocchio(original_query, related_documents)
+    #
+    # for token in query_tokens:
+    #     if token in modified_query:
+    #         del modified_query[token]
 
-    query_tokens = list(tokenize(query, True))
-    original_query = dict(index.score_query(query_tokens, smart[3:])[1])
-
-    docs = list(docs)
-    small_index = slides_index[docs, :]
-    occurrences = small_index.sum(axis=0)
-    print(occurrences.shape)
-    occurring = np.argsort(occurrences)[0,-10:].A1
-
-    occurring = slides_index.nums_to_toks(occurring)
-
-    related_documents = [dict(index.score_documents(occurring, doc, smart[:3])[1]) for doc in docs]
-    modified_query = rocchio(original_query, related_documents)
-
-    for token in query_tokens:
-        if token in modified_query:
-            del modified_query[token]
-
+    return {
+        "informatics": 2.1,
+        "slides": 1.9
+    }
     return modified_query
-
-
-if __name__ == '__main__':
-    print(search_query('content', ['06c0707a-7af7-4fe4-9417-ca1474b01370']))

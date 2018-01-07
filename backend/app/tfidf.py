@@ -1,21 +1,18 @@
-import sys
-import string
-from itertools import groupby
+# import sys
+# import string
+# from itertools import groupby
 import collections
-import operator
+# import operator
 import numpy as np
 # from scipy import optimize
 # import matplotlib.pyplot as plt
-from operator import and_, or_
-import itertools
-import time
+# from operator import and_, or_
+# import itertools
+# import time
 # import numpy as np
 # import re
 from tools.ttdstokenizer import tokenize
-from .inverted_index import df as df_
-from .inverted_index import tf as tf_
-from .inverted_index import get_documents
-
+# from scipy.sparse import csr_matrix
 
 inputs = [(1,"This is text number 1".split()),
 (2,"This is text number 2".split()),
@@ -25,7 +22,7 @@ inputs = [(1,"This is text number 1".split()),
 (10,"Random words")]
 
 
-class ProximityIndex():
+class ProximityIndex:
     """
     Input is a list of tuples of the form:
         [ (document_id1 , ["word1",word2",..] ) ,  (document_id2 , ["word1",word2",..] ), ...]
@@ -34,35 +31,21 @@ class ProximityIndex():
 
     Indexes the documents for proximity search.
     """
+
+
+    def __init__(self, index):
+        self._index = index
+        self.N = len(index.get_documents())
+
+
     def ld(self):
             return collections.defaultdict(list)
-    def __init__(self,input,json=True):
-        self.from_json= json
-        if json:
-            self.doc_ids = get_documents()
-            return
-        program_starts = time.time()
 
 
-        index = collections.defaultdict(self.ld)
-        self.doc_ids = set()
-        for text in input:
-            self.doc_ids.add(text[0])
-            for i, word in enumerate(text[1]):
-                index[word][text[0]].append(i)
-        self.index = index
+    def tf(self, term, document, t="n", index=(None,None)):
 
-        now = time.time()
-        print("INDEXING:: It has been {0} seconds since the loop started".format(now - program_starts))
-
-
-    def tf(self,term,document,t="n",index=(None,None)):
-        if not index[0] and self.from_json:
-            tf = df_(term,document)
-        else:
-            ind = index[1] if index[1] else self.index
-            doc_ids = index[0] if index[0] else self.doc_ids
-            tf = len(ind[term][document])
+        index = index[1] if index[1] else self.index
+        tf = len(index[term][document])
 
         if t=="a":
             return 0.5 * tf
@@ -76,16 +59,13 @@ class ProximityIndex():
             return 1 + np.log10(tf)
         return
 
-    def idf(self,term,t="t",index=(None,None)):
-        if not index[0] and self.from_json:
-            df = tf_(term)
-            N = len(self.doc_ids)
-        else:
+    def idf(self, term, t="t", index=(None,None)):
 
-            ind = index[1] if index[1] else self.index
-            doc_ids = index[0] if index[0] else self.doc_ids
-            df = len(ind[term].keys())
-            N = len(doc_ids)
+        doc_ids = index[0] if index[0] else self.doc_ids
+        index = index[1] if index[1] else self.index
+
+        df = len(index[term].keys())
+        N = len(doc_ids)
 
         if t=="n":
             return 1
@@ -95,50 +75,10 @@ class ProximityIndex():
             return np.max([0,np.log10((N-df)/df)])
         return df
 
-    def df(self,term):
-        return len(self.index[term].keys())
-
-    def cf(self,term):
-        return sum([self.tf(term,x) for x in self.index[term].keys()])
-
-
     def w(self,term,document,t="ltc"):
         tf = self.tf(term,document,t[0])
         df = self.idf(term,t[1])
-        N = len(self.doc_ids)
         return tf * df
-
-    def score(self,query,document,t="ltc"):
-        query_terms = set(tokenize(query, True))
-        # print (query_terms)
-        if self.from_json:
-            intersection = set([x for x in query_terms if df_(x,document) != 0])
-        else:
-            intersection = set([x for x in query_terms if self.index[x].get(document) != None])
-
-        return sum([self.w(x,document,t) for x in intersection])
-
-
-    def score_documents(self,query_terms,document,t="ltc"):
-
-        scores = [self.score(term,document,t) for term in set(query_terms)]
-        scores2 = [[term ,self.score(term,document,t)]   for term in set(query_terms)]
-        tf_norm = 1
-        if t[0]== "L":
-            tf_norm =1 + np.log10(np.average([self.tf(term,document,"n") for term in set(query_terms)]))
-
-        if t[0]== "a":
-            tf_norm = np.max([self.tf(term,document,"n") for term in set(query_terms)])
-
-        norm = 1
-        df_norm = 1
-        if t[2]== "c":
-            norm = 1/ np.linalg.norm(scores)
-        scores = [x / tf_norm * norm * df_norm for x in scores]
-
-        for x in scores2:
-            x[1] = x[1]/ tf_norm * norm * df_norm
-        return scores ,scores2
 
     def score_query(self,query_terms,t="lnc"):
         input = [(1,query_terms)]
@@ -170,25 +110,81 @@ class ProximityIndex():
             x[1] = x[1]/tf_norm * norm * df_norm
 
         return scores,scores2
-    def cosin_score(self,query,document,T="ltclnc"):
-        query_terms = list(tokenize(query, True))
-
-        qi_scores,qweights = self.score_query(query_terms,T[3:])
-        di_scores,dweights =  self.score_documents(query_terms,document,T[:3])
-        # print (qi_scores,qi_scores)
-
-        assert len(qi_scores) == len(di_scores)
-        s = np.dot(np.array(qi_scores),np.array(di_scores))
-        norm = 1 #/ (np.linalg.norm(qi_scores) * np.linalg.norm(di_scores))
-        v = s * norm
-        if not np.isnan(v): return v,dweights,qweights
-        return 0,dweights,qweights
 
     def ranked_search_cos(self,term,SMART="ltclnc"):
-        scores = [(self.cosin_score(term,d,SMART),d) for d in self.doc_ids]
-        sorted_scores =  sorted(scores,reverse=True,key=lambda x: x[0][0])
-        rankings = [(x[0][0],x[1]) for x in sorted_scores]
-        return rankings, sorted_scores
+        # NEw stuff here
+        query_terms = list(tokenize(term, True))
+
+        # Get all term frequencies [doc x terms]
+        tf_all = self._index[:,query_terms].todense()
+        # apply normalizations to tf
+        if SMART[0] == "l":
+            tf_all = 1 + np.log(tf_all)
+        if SMART[0] == "n":
+            pass
+            # tf_all *= 1
+        if SMART[0] == "a":
+            max_tf = np.max(tf_all,axis= 0)
+            tf_all = 0.5 + (0.5)  * tf_all / np.max(tf_all,axis=0)
+
+        if SMART[0] == "b":
+            tf_all = 1* (tf_all > 0)
+
+        if SMART[0] == "L":
+            tf_all = (1 + np.log10(tf_all) ) / (1 + np.log10(np.average(tf_all,axis=1)))
+        
+
+
+        # Get df for all terms [1 x terms]
+        df_all = np.sum(self._index[:,query_terms] > 0,axis=0)
+        # Stack for all docs [doc x terms]
+        df_all = np.vstack([df_all]* tf_all.shape[0])
+
+
+        # apply normalizations to df 
+        if SMART[1] == "n":
+            df_all = np.ones_like(df_all)
+
+        if SMART[1] == "t":
+            df_all = (self.N * np.ones_like(df_all))/ df_all
+            df_all = np.log(df_all)
+        
+        if SMART[1] == "p":
+            df_all = np.vstack([np.zeros_like(df_all),df_all])
+            df_all = np.max(df_all,axis=0)
+        
+        # Documents tf_idf for each token
+        documents_tf_idf = np.matrix(np.multiply(tf_all,df_all))
+
+        # Query Scores only calculated once
+        qi_scores,qweights = self.score_query(query_terms,SMART[3:])
+        query_tf_if = np.array(qi_scores).reshape((len(qi_scores), 1))
+        
+        # Compute scores
+        cosine_scores = documents_tf_idf.dot(query_tf_if)
+
+        
+        cosine_scores = (np.array(cosine_scores)[:,0])
+        sorted_scores = np.sort(cosine_scores)[::-1]
+        sorted_doc_nums = np.argsort(cosine_scores)[::-1]
+        
+        dweights = documents_tf_idf[sorted_doc_nums,:]
+
+        sorted_doc_ids = self._index.nums_to_docs(sorted_doc_nums)
+
+        rankings = list(zip(sorted_scores,sorted_doc_ids))
+
+        
+        d_weights = {}
+        for i,d in enumerate(rankings):
+            uuid = d[1]
+            w = dweights[i,:]
+            term_weights = {}
+            for j,t in enumerate(query_terms):
+                term_weights[t] = w[0,j]
+            d_weights[uuid] = term_weights
+
+        return rankings, (qweights,d_weights)
 
     def search(self,term,SMART="ltcLnc"):
 
@@ -222,20 +218,11 @@ class ProximityIndex():
 
 def tfidf_test_instance(json):
     global inputs
-    i = ProximityIndex(inputs,json)
+    i = ProximityIndex(inputs, json)
     return i,inputs
 
-if __name__ == "__main__":
-    i = ProximityIndex(inputs)
-    # For now :
-        # the format is ddd.qqq
-        #                                 tf    idf   Norm
-        # for ddd, acceptable modes are [n,l,L][n,t,p][n,c]
-        # for qqq, acceptable modes are [n,l,L][n][n,c]
-            # for ifd only n makes sense
-    # x,_ = i.ranked_search_cos("This is is","ltclnc")
-    # print ("ltclnc",x)
-    # print ("ltcLnc",i.ranked_search_cos("This is is","ltcLnc"))
-    # print ("ltcLnc",i.ranked_search_cos("This is not 1","ltcLnc"))
 
-    print (i.search("This is weird","LtcLnc"))
+def search_query(index, query, smart):
+    proximity_index = ProximityIndex(index)
+    rankings, sorted_scores = proximity_index.ranked_search_cos(query, smart)
+    return rankings

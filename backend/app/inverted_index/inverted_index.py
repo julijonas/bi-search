@@ -58,6 +58,16 @@ class InvertedIndex:
             return self._metadata.get(document, None)['url']
         return None
 
+    def get_title(self, document):
+        """
+        Returns the URL of the requested document.
+        :param document: Document ID (GUID)
+        :return: Url of the document (string). None if the document is not known.
+        """
+        if document in self._metadata:
+            return self._metadata.get(document, None)['title']
+        return None
+
     def get_documents(self):
         """
         :return: A set of all document ids.

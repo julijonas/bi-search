@@ -1,5 +1,6 @@
 from . import Handler, Schema, g, SMART_SCHEMA
-from .rocchio import search_query, feedback_terms
+from .rocchio import feedback_terms
+from .tfidf import search_query
 from .inverted_index import slides_index, pages_index
 from . import get_preview
 from .tfidf import tfidf_test_instance
@@ -16,7 +17,7 @@ def search_pages_post():
     """
     Query search with optional relevance feedback.
     """
-    scores = search_query(g.data['query'], g.data['smart'])
+    scores = search_query(pages_index, g.data['query'], g.data['smart'])
     sorted_scores = sorted(((score, uuid) for score, uuid in scores if score > 0), reverse=True)
     num_results = len(sorted_scores)
 
@@ -25,7 +26,7 @@ def search_pages_post():
             uuid = uuid,
             tfidf = {'word1': 0.7071067811865475, 'word2': 0.5071067811865475},
             score = score,
-            title = uuid,
+            title = pages_index.get_title(uuid),
             preview = get_preview(uuid, g.data['query']),
             url = pages_index.get_url(uuid)
         )
@@ -48,7 +49,7 @@ def search_slides_post():
     """
     Query search with optional relevance feedback.
     """
-    scores = search_query(g.data['query'], g.data['smart'])
+    scores = search_query(slides_index, g.data['query'], g.data['smart'])
     sorted_scores = sorted(((score, uuid) for score, uuid in scores if score > 0), reverse=True)
     num_results = len(sorted_scores)
     results = [
@@ -82,23 +83,3 @@ def search_feedback_post():
     sorted_term_weights = sorted(term_weights.items(), key=lambda x: x[1], reverse=True)[:10]
 
     return [dict(term=term, weight=weight) for term, weight in sorted_term_weights]
-
-
-@Handler('/tfidf_test', methods=['GET'], args_schema=Schema(cast=dict, schema={
-    "q": Schema(cast=str, length=(3, 128)),
-    "smart": SMART_SCHEMA
-}))
-def tfidf_test_get():
-    # example query :
-    # http://127.0.0.1:5000/tfidf_test?q=This%20is%20best&smart=lncLnc
-    # crate test instance
-    # i,test_documents = tfidf_test_instance(False)
-
-    # example query with json inputs:
-    # http://127.0.0.1:5000/tfidf_test?q=This%20document%20is%20a%20sample%20file&smart=ltcLnc
-
-    # Create normal instance -> read from real the index
-    i, test_documents = tfidf_test_instance(True)
-
-    # Return dict as json
-    return i.search(g.args['q'], g.args['smart'])
