@@ -132,10 +132,25 @@ class TFIDFQuery:
             tf_all = 1 * (tf_all > 0)
 
         if SMART[0] == "L":
-            tf_all = (1 + np.log10(tf_all)) / (1 + np.log10(np.average(tf_all, axis=1)))
+
+            t1 = 1 + np.log(tf_all)
+            t2 = np.average(tf_all, axis=1)
+            t3 = 1 + np.log(t2)
+            t3 = np.hstack([t3]*t1.shape[1])
+
+            # This code replaces the tokens with infinite weights to have no effect
+            np.place(t1, t1 == -np.inf, 0)
+            np.place(t1, np.isnan(t1), 0)
+            np.place(t3, t3 == -np.inf, 1)
+            np.place(t3, t3 == 0, 1)
+            np.place(t3, np.isnan(t3), 1)
+
+            #tf_all = t1 / t3
+
 
         # Get df for all terms [1 x terms]
         df_all = np.sum(self._index[:, query_terms] > 0, axis=0)
+
         # Stack for all docs [doc x terms]
         df_all = np.vstack([df_all] * tf_all.shape[0])
 
@@ -152,8 +167,8 @@ class TFIDFQuery:
             df_all = np.max(df_all, axis=0)
 
         # Documents tf_idf for each token
-        documents_tf_idf = np.matrix(np.multiply(tf_all, df_all))
-        print(documents_tf_idf.shape)
+        documents_tf_idf = np.multiply(tf_all, df_all)
+
         norm = 1
         if SMART[2] == "n":
             norm = 1
