@@ -4,6 +4,7 @@
 .App-logo {
   height: 3.5em;
   margin: 0 1.1em 0 0.2em;
+  text-indent: -9999em;
 }
 
 .App-header {
@@ -24,10 +25,6 @@
   display: inline;
   margin: 0;
   vertical-align: 0.5em;
-}
-
-.App-intro {
-  font-size: large;
 }
 
 .App-content {
