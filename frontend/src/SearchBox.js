@@ -83,8 +83,7 @@ class SearchBox extends React.Component {
 
   handleEnter = ({key}) => {
     if (key === 'Enter') {
-      // This is the default action
-      this.props.onChange({mode: 'slides'}, true);
+      this.props.onChange({mode: this.props.mode}, true);
     }
   };
 

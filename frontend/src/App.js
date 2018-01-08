@@ -26,12 +26,12 @@ class App extends React.Component {
 
     // Restore history.state or initialize from URL or from scratch
     this.state = window.history.state || {
-      mode: mode,
+      mode: mode || 'slides', // Default mode
       query: query || '',
       feedbackTerms: [],
-      smart: 'ltclnc'.split(''),
-      // TODO backend: 'lncltc' gives zeros scores although it is recommended in slides
+      smart: 'ltclnc'.split(''), // Default smart scheme
       results: [],
+      queryWeights: {},
       selected: [],
       page: 0,
       pageCount: 0,
@@ -48,10 +48,13 @@ class App extends React.Component {
     };
   }
 
-  handleParamChange = (params, performQuery) => {
+  handleParamChange = (params, performQuery, clearResults=false) => {
     if (performQuery) {
       params = {selected: [], feedbackTerms: [], ...params,
         query: (params.query || this.state.query).trim()};
+      if (clearResults) {
+        params = {...params, page: 0, results: []};
+      }
       const state = {...this.state, ...params};
       this.fetchResults(state);
       this.updateTitle(state);
@@ -61,16 +64,7 @@ class App extends React.Component {
   };
 
   handleSearchChange = (params, performQuery) => {
-    if (performQuery) {
-      params = {selected: [], feedbackTerms: [], ...params,
-        query: (params.query || this.state.query).trim(),
-        page: 0, results: []};
-      const state = {...this.state, ...params};
-      this.fetchResults(state);
-      this.updateTitle(state);
-      window.history.pushState(state, '', `/${state.mode}/${state.query}`);
-    }
-    this.setState(params);
+    this.handleParamChange(params, performQuery, true);
   };
 
   updateTitle({query}) {
@@ -163,22 +157,24 @@ class App extends React.Component {
           </a>
         </header>
         <div className="App-content">
-          <SearchBox query={query} smart={smart} onChange={this.handleSearchChange}/>
-          {results.length && mode === 'slides' ? (
-            <div>
-              {feedbackTerms.length ? (
-                <SlideFeedback terms={feedbackTerms}
-                               onUpdate={this.handleFeedbackUpdate} onRemove={this.handleTermRemove}/>
-              ) : null}
-              <SlideResults results={results} selected={selected} onSelect={this.handleSlideSelect}/>
-              <Pagination page={page} pageCount={pageCount} onChange={this.handleParamChange}/>
-            </div>
-          ) : results.length && mode === 'pages' ? (
+          <SearchBox query={query} smart={smart} mode={mode} onChange={this.handleSearchChange}/>
+          {results.length ?
+            mode === 'slides' ? (
+              <div>
+                {feedbackTerms.length ? (
+                  <SlideFeedback terms={feedbackTerms}
+                                 onUpdate={this.handleFeedbackUpdate} onRemove={this.handleTermRemove}/>
+                ) : null}
+                <SlideResults results={results} selected={selected} onSelect={this.handleSlideSelect}/>
+                <Pagination page={page} pageCount={pageCount} onChange={this.handleParamChange}/>
+              </div>
+            ) : (
               <div>
                 <PageResults results={results} queryWeights={queryWeights}/>
                 <Pagination page={page} pageCount={pageCount} onChange={this.handleParamChange}/>
               </div>
-            ) : null }
+            )
+          : null }
         </div>
       </div>
     );
