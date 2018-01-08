@@ -14,7 +14,7 @@ from .infrastructure import *
 Handler = UniversalHandler(app)
 
 
-SMART_SCHEMA = Schema(cast=str, regex='([nlabL][ntp][ncub]){2}', optional=True, default='lncltc')
+SMART_SCHEMA = Schema(cast=str, regex='([nlabL][ntp][ncb]){2}', optional=True, default='lncltc')
 
 
 # Register validation handlers

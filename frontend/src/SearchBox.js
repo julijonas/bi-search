@@ -7,8 +7,8 @@ import './SearchBox.css';
 const SmartLetter = ({name, value, options, onChange}) => (
   <span className="SmartLetter">
     <select className="SmartLetter-select" name={name} onChange={onChange} value={value}>
-      {options.map((option) => (
-        <option key={option}>{option}</option>
+      {Object.entries(options).map(([option, description]) => (
+        <option key={option}>{option} ({description})</option>
       ))}
     </select>
   </span>
@@ -37,9 +37,23 @@ class SmartBox extends React.Component {
 
 
 const smartOptions = [
-  ['n', 'l', 'a', 'b', 'L'],
-  ['n', 't', 'p'],
-  ['n', 'c', 'u', 'b'],
+  {
+    n: 'natural',
+    l: 'logarithm',
+    a: 'augmented',
+    b: 'boolean',
+    L: 'log average',
+  },
+  {
+    n: 'no',
+    t: 'idf',
+    p: 'prob idf',
+  },
+  {
+    n: 'none',
+    c: 'cosine',
+    b: 'byte size',
+  },
 ];
 
 

@@ -66,6 +66,7 @@
 .SmartLetter-select {
   margin-left: 0.6em;
   padding: 0 0.5em;
+  width: 3.6em;
 }
 
 .SmartLetter:nth-child(3)::after {
