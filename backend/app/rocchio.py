@@ -1,5 +1,5 @@
 import numpy as np
-from .tfidf import ProximityIndex
+from .tfidf import TFIDFQuery
 from tools.ttdstokenizer import tokenize
 from . import slides_index
 
@@ -21,7 +21,7 @@ def rocchio(query_vec, rel_doc_vec):
 def feedback_terms(query, docs, smart):
     """Find n most relevance feedback terms given query and document UUIDs."""
 
-    index = ProximityIndex(slides_index)
+    index = TFIDFQuery(slides_index)
     query_tokens = list(tokenize(query, True))
     query_nums = slides_index.toks_to_nums(query_tokens)
 
