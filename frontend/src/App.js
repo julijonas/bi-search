@@ -26,6 +26,8 @@ class App extends React.Component {
 
     // Restore history.state or initialize from URL or from scratch
     this.state = window.history.state || {
+      firstTime: !query,
+      loading: !!query,
       mode: mode || 'slides', // Default mode
       query: query || '',
       feedbackTerms: [],
@@ -50,10 +52,10 @@ class App extends React.Component {
 
   handleParamChange = (params, performQuery, clearResults=false) => {
     if (performQuery) {
-      params = {selected: [], feedbackTerms: [], ...params,
+      params = {firstTime: false, selected: [], feedbackTerms: [], ...params,
         query: (params.query || this.state.query).trim()};
       if (clearResults) {
-        params = {...params, page: 0, results: []};
+        params = {...params, page: 0, results: [], loading: true};
       }
       const state = {...this.state, ...params};
       this.fetchResults(state);
@@ -92,7 +94,7 @@ class App extends React.Component {
     }).then((res) => {
       return res.json();
     }).then((results) => {
-      this.updateState(results);
+      this.updateState({...results, loading: false});
     }).catch(e => {
       console.error("Failed: ", e);
     });
@@ -137,6 +139,7 @@ class App extends React.Component {
   }
 
   handleFeedbackUpdate = () => {
+    this.setState({loading: true});
     this.fetchResults(this.state);
   };
 
@@ -147,7 +150,48 @@ class App extends React.Component {
   };
 
   render() {
-    const {mode, query, feedbackTerms, smart, results, selected, page, pageCount, queryWeights} = this.state;
+    const {loading, firstTime, mode, query, feedbackTerms, smart,
+      results, selected, page, pageCount, queryWeights} = this.state;
+
+    let content;
+
+    if (loading) {
+      content = (
+        <div class="App-loader">Loading</div>
+      )
+    } else if (!firstTime) {
+      if (results.length) {
+
+        if (mode === 'slides') {
+
+          content = (
+            <div>
+              {feedbackTerms.length ? (
+                <SlideFeedback terms={feedbackTerms}
+                               onUpdate={this.handleFeedbackUpdate} onRemove={this.handleTermRemove}/>
+              ) : null}
+              <SlideResults results={results} selected={selected} onSelect={this.handleSlideSelect}/>
+              <Pagination page={page} pageCount={pageCount} onChange={this.handleParamChange}/>
+            </div>
+          );
+
+        } else {
+
+          content = (
+            <div>
+              <PageResults results={results} queryWeights={queryWeights}/>
+              <Pagination page={page} pageCount={pageCount} onChange={this.handleParamChange}/>
+            </div>
+          );
+
+        }
+      } else {
+        content = (
+          <h2>No results found.</h2>
+        );
+      }
+    }
+
     return (
       <div className="App">
         <header className="App-header">
@@ -158,23 +202,7 @@ class App extends React.Component {
         </header>
         <div className="App-content">
           <SearchBox query={query} smart={smart} mode={mode} onChange={this.handleSearchChange}/>
-          {results.length ?
-            mode === 'slides' ? (
-              <div>
-                {feedbackTerms.length ? (
-                  <SlideFeedback terms={feedbackTerms}
-                                 onUpdate={this.handleFeedbackUpdate} onRemove={this.handleTermRemove}/>
-                ) : null}
-                <SlideResults results={results} selected={selected} onSelect={this.handleSlideSelect}/>
-                <Pagination page={page} pageCount={pageCount} onChange={this.handleParamChange}/>
-              </div>
-            ) : (
-              <div>
-                <PageResults results={results} queryWeights={queryWeights}/>
-                <Pagination page={page} pageCount={pageCount} onChange={this.handleParamChange}/>
-              </div>
-            )
-          : null }
+          {content}
         </div>
       </div>
     );

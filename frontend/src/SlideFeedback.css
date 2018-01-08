@@ -1,5 +1,5 @@
 .SlideFeedback {
-  margin: 1em 0.3em;
+  margin: 1em 0;
   padding: 1em;
   background: #e1e1e1;
 }
@@ -48,7 +48,7 @@
   border: 1px solid var(--secondary-color);
   font-size: 1.3em;
   cursor: pointer;
-  margin-left: 0.3em;
+  margin-left: 0.6em;
 }
 
 .SlideFeedback-update:hover {

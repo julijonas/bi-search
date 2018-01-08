@@ -3,50 +3,42 @@ import Collapse from 'react-collapse';
 import './WordScorePanel.css';
 
 const WordScore = ({word, score}) => (
-   <p className="Box">
-     <div className="PercentageBox" style={{width: '' + score*100 + '%'}}>
-      <div className="Word">{word}:</div>
-      <div className="Score">{score.toFixed(3)}</div>
-     </div>
-   </p>
+  <div className="WordScore" style={{width: `${score * 100}%`}}>
+    <div className="WordScore-score">{word}: {score.toFixed(3)}</div>
+  </div>
 );
 
 class WordScorePanel extends React.Component {
 
   constructor(props) {
-     super(props);
-     this.state = {
-       isOpened: this.props.isOpened
-     };
-     this.handleChange = this.handleChange.bind(this);
+    super(props);
+    this.state = {
+      isOpened: this.props.isOpened,
+    };
   }
 
-  handleChange() {
-     this.setState({isOpened: !this.state.isOpened});
-  }
+  handleChange = () => {
+    this.setState({isOpened: !this.state.isOpened});
+  };
 
   render() {
     const {results, text} = this.props;
-    const isChecked = this.state.isOpened;
-    return results ? (
-        <div className="WordScore">
-           <label className="label">
-              <input className="input"
-               type="checkbox"
-               checked={isChecked}
-               onChange={this.handleChange} />
-             {text}
-           </label>
-      
-           <Collapse isOpened={isChecked} fixedHeight={results.length*36} >
-              <div className="WordWithScore">
-                  {Object.keys(results).map(function(key, index){
-                     return <WordScore word={key} score={results[key]} key={key} />
-                  })}
-              </div>
-           </Collapse>
-        </div>
-    ) : null
+
+    return (
+      <div className="WordScorePanel">
+        <a onClick={this.handleChange} className="WordScorePanel-toggle">
+          {this.state.isOpened ? 'Hide' : 'Show'} {text}
+        </a>
+
+        <Collapse isOpened={this.state.isOpened} fixedHeight={results.length * 36} >
+          <div className="WordScorePanel-scores">
+            {Object.keys(results).map((key) => (
+               <WordScore word={key} score={results[key]} key={key} />
+            ))}
+          </div>
+        </Collapse>
+      </div>
+    );
   }
 }
 

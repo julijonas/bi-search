@@ -8,7 +8,6 @@
 
 .SearchBox-smart {
   margin: 2em 0;
-  padding: 0 0.3em;
   text-align: center;
 }
 
@@ -28,7 +27,7 @@
 .SearchBox-smart-info {
   cursor: help;
   text-decoration: none;
-  margin: 0 0.6em 0 2em;
+  margin-left: 2em;
   display: inline-block;
   padding: 0 0.8em;
   line-height: 2.35em;
@@ -40,7 +39,6 @@
 
 .SearchBox-query, .SearchBox-button {
   padding: 0.3em;
-  margin-right: 0.3em;
   font-size: 1.3em;
   background: #fff;
   height: 3rem;
@@ -50,6 +48,7 @@
 .SearchBox-button {
   border: 1px solid var(--secondary-color);
   cursor: pointer;
+  margin-left: 0.5em;
 }
 
 .SearchBox-button:hover {
@@ -58,13 +57,12 @@
 
 .SearchBox-query {
   border: 1px solid var(--primary-color);
-  margin-left: 0.3em;
   flex: 1;
   min-width: 0;
 }
 
 .SmartLetter-select {
-  margin-left: 0.6em;
+  margin-right: 0.6em;
   padding: 0 0.5em;
   width: 3.6em;
 }
@@ -72,5 +70,5 @@
 .SmartLetter:nth-child(3)::after {
   content: ".";
   font-size: 1.2em;
-  margin-left: 0.6em;
+  margin-right: 0.3em;
 }

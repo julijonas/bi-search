@@ -9,20 +9,13 @@ const Page = ({data}) => (
     <NewTabLink className="Page-link" href={data.url}>
       <div className="Page-title">{data.title}</div>
       <div className="Page-url">{data.url}</div>
-      <div className="Page-content"><Highlighter
-        highlightClassName="Highlight"
-        searchWords={data.preview.highlight}
-        autoEscape={true}
-        textToHighlight={data.preview.preview}/>
+      <div className="Page-content">
+        <Highlighter
+          highlightClassName="Highlight" searchWords={data.preview.highlight}
+          autoEscape={true} textToHighlight={data.preview.preview}/>
       </div>
     </NewTabLink>
-    <WordScorePanel results={data.tfidf} text="Show TFIDF" isOpened={false} />
-  </div>
-);
-
-const QueryWords = ({queryWeights}) => (
-  <div className="QueryWords">
-    <WordScorePanel results={queryWeights} text="Show TFIDF weights for query words" isOpened={false} />
+    <WordScorePanel results={data.tfidf} text="TF-IDF term weights for this document" isOpened={false} />
   </div>
 );
 
@@ -31,7 +24,7 @@ class PageResults extends React.Component {
     const {results, queryWeights} = this.props;
     return (
       <div className="PageResults">
-        <QueryWords queryWeights={queryWeights}/>
+        <WordScorePanel results={queryWeights} text="overall TF-IDF term weights" isOpened={false} />
         {results.map((data) => (
           <Page key={data.uuid} data={data}/>
         ))}
