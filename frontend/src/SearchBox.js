@@ -8,7 +8,7 @@ const SmartLetter = ({name, value, options, onChange}) => (
   <span className="SmartLetter">
     <select className="SmartLetter-select" name={name} onChange={onChange} value={value}>
       {Object.entries(options).map(([option, description]) => (
-        <option key={option}>{option} ({description})</option>
+        <option key={option} value={option}>{`${option}\xA0\xA0\xA0\xA0\xA0\xA0(${description})`}</option>
       ))}
     </select>
   </span>
