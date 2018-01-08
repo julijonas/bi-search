@@ -26,17 +26,23 @@ class App extends React.Component {
 
     // Restore history.state or initialize from URL or from scratch
     this.state = window.history.state || {
+      // Loading flags
       firstTime: !query,
       loading: !!query,
+
+      // Parameters
       mode: mode || 'slides', // Default mode
-      query: query || '',
-      feedbackTerms: [],
+      query: (query || '').trim(),
       smart: 'ltclnc'.split(''), // Default smart scheme
+      page: 0,
+      selected: [],
+      feedbackTerms: [],
+
+      // Results
       results: [],
       queryWeights: {},
-      selected: [],
-      page: 0,
       pageCount: 0,
+      resultCount: 0,
     };
 
     // Fetch results if restored from URL
@@ -50,23 +56,26 @@ class App extends React.Component {
     };
   }
 
-  handleParamChange = (params, performQuery, clearResults=false) => {
+  handleParamChange = (params, performQuery) => {
     if (performQuery) {
-      params = {firstTime: false, selected: [], feedbackTerms: [], ...params,
+      params = {
+        firstTime: false,
+        loading: true,
+        page: 0,
+        feedbackTerms: [],
+        selected: [],
+        results: [],
+        queryWeights: {},
+        pageCount: 0,
+        resultCount: 0,
+        ...params,
         query: (params.query || this.state.query).trim()};
-      if (clearResults) {
-        params = {...params, page: 0, results: [], loading: true};
-      }
       const state = {...this.state, ...params};
       this.fetchResults(state);
       this.updateTitle(state);
       window.history.pushState(state, '', `/${state.mode}/${state.query}`);
     }
     this.setState(params);
-  };
-
-  handleSearchChange = (params, performQuery) => {
-    this.handleParamChange(params, performQuery, true);
   };
 
   updateTitle({query}) {
@@ -201,7 +210,7 @@ class App extends React.Component {
           </a>
         </header>
         <div className="App-content">
-          <SearchBox query={query} smart={smart} mode={mode} onChange={this.handleSearchChange}/>
+          <SearchBox query={query} smart={smart} mode={mode} onChange={this.handleParamChange}/>
           {content}
         </div>
       </div>
