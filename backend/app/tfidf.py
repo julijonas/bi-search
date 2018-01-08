@@ -11,14 +11,10 @@ inputs = [(1, "This is text number 1".split()),
           (10, "Random words")]
 
 
-class ProximityIndex:
+class TFIDFQuery:
     """
-    Input is a list of tuples of the form:
-        [ (document_id1 , ["word1",word2",..] ) ,  (document_id2 , ["word1",word2",..] ), ...]
+    Creates a local index for the query and uses the Inverted Index pass at isntanciation to perform a query.
 
-    the words should already be stemmed and cleaned with the tokenizer
-
-    Indexes the documents for proximity search.
     """
 
     def __init__(self, index):
@@ -29,7 +25,15 @@ class ProximityIndex:
         return collections.defaultdict(list)
 
     def tf(self, term, document, t="n", index=(None, None)):
+        """
+        Returns the number of times term is in document
 
+        :param (str) term:
+        :param (uuid) document:
+        :param t:
+        :param index:
+        :return: (int) Number of ocurances
+        """
         index = index[1] if index[1] else self.index
         tf = len(index[term][document])
 
@@ -46,7 +50,15 @@ class ProximityIndex:
         return
 
     def idf(self, term, t="t", index=(None, None)):
+        """
+                Returns the number documents term appears in the query
 
+                :param (str) term:
+                :param (uuid) document:
+                :param t:
+                :param index:
+                :return: (int) Number of ocurances
+                """
         doc_ids = index[0] if index[0] else self.doc_ids
         index = index[1] if index[1] else self.index
 
@@ -98,7 +110,12 @@ class ProximityIndex:
         return scores, scores2
 
     def score_documents(self, query_terms, SMART):
-
+        """
+        Returns the tfidf for all documents
+        :param query_terms:
+        :param SMART:
+        :return:
+        """
         # Get all term frequencies [doc x terms]
         tf_all = self._index[:, query_terms].todense()
         # apply normalizations to tf
@@ -150,8 +167,15 @@ class ProximityIndex:
         return 1. * documents_tf_idf / norm
 
     def ranked_search_cos(self, term, SMART="ltclnc"):
-        # NEw stuff here
 
+        """
+        Returns ranked documents and relevant weights
+        :param term: Search string
+        :param SMART: eg. ltcLnc
+        :return: list of ranings , (query_weights , document_weights)
+        """
+
+        # Tokenize query
         query_terms = list(tokenize(term, True))
 
         if len(query_terms) == 0:
@@ -160,6 +184,7 @@ class ProximityIndex:
 
         original_query_terms = query_terms.copy()
 
+        # Filter words not in the index
         is_in_index = lambda x: len(self._index.toks_to_nums([x])) > 0
 
         query_terms = list(set((filter(is_in_index, query_terms))))
@@ -184,7 +209,7 @@ class ProximityIndex:
         sorted_scores = np.sort(cosine_scores)[::-1]
         sorted_doc_nums = np.argsort(cosine_scores)[::-1]
 
-        # Things to return
+        # Return weights
         dweights = documents_tf_idf[sorted_doc_nums, :]
 
         sorted_doc_ids = self._index.nums_to_docs(sorted_doc_nums)
@@ -236,12 +261,12 @@ class ProximityIndex:
 
 def tfidf_test_instance(json):
     global inputs
-    i = ProximityIndex(inputs, json)
+    i = TFIDFQuery(inputs, json)
     return i, inputs
 
 
 def search_query(index, query, smart):
-    proximity_index = ProximityIndex(index)
+    proximity_index = TFIDFQuery(index)
     scores, (q_weights, d_weights) = proximity_index.ranked_search_cos(query, smart)
 
     scores = sorted(((score, uuid, d_weights[uuid]) for score, uuid in scores if score > 0), reverse=True)
