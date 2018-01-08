@@ -2,6 +2,8 @@ import React from 'react';
 import Modal from "./Modal";
 import {NewTabLink} from "./util";
 import './SearchBox.css';
+import smartTable from "./smartTable.png";
+
 
 
 const SmartLetter = ({name, value, options, onChange}) => (
@@ -121,6 +123,14 @@ class SearchBox extends React.Component {
         </div>
         <Modal show={this.state.smartInfoShown} onClose={this.hideSmartInfo}>
           <h2>SMART weighting schemes</h2>
+          <p>
+            You can swap between the various weighing variants when performing a search.
+            Then you can observe the impact that each option has on the results.
+          </p>
+          <p>
+            The following options are available:
+          </p>
+          <img src={smartTable} alt="Table of supported weighting options"/>
           <p>
             See also Wikipedia entries on <NewTabLink href="https://en.wikipedia.org/wiki/SMART_Information_Retrieval_System">
             SMART Information Retrieval System</NewTabLink> and <NewTabLink href="https://en.wikipedia.org/wiki/Relevance_feedback">
