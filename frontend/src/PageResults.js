@@ -1,21 +1,21 @@
 import React from 'react';
-import './PageResults.css';
+import Highlighter from 'react-highlight-words';
 import WordScorePanel from './WordScorePanel';
+import {NewTabLink} from "./util";
+import './PageResults.css';
 
-var Highlighter = require('react-highlight-words');
-
-const Page = ({data, preview}) => (
+const Page = ({data}) => (
   <div className="Page" data-uuid={data.uuid}>
-    <a className="Page-link" href={data.url} target="_blank"> 
+    <NewTabLink className="Page-link" href={data.url}>
       <div className="Page-title">{data.title}</div>
       <div className="Page-url">{data.url}</div>
       <div className="Page-content"><Highlighter
         highlightClassName="Highlight"
-        searchWords={preview.highlight}
+        searchWords={data.preview.highlight}
         autoEscape={true}
-        textToHighlight={preview.preview}/>
+        textToHighlight={data.preview.preview}/>
       </div>
-    </a>
+    </NewTabLink>
     <WordScorePanel results={data.tfidf} text="Show TFIDF" isOpened={false} />
   </div>
 );
@@ -27,17 +27,16 @@ const QueryWords = ({queryWeights}) => (
 );
 
 class PageResults extends React.Component {
-
   render() {
     const {results, queryWeights} = this.props;
     return (
       <div className="PageResults">
         <QueryWords queryWeights={queryWeights}/>
         {results.map((data) => (
-          <Page key={data.uuid} data={data} preview={data.preview}/>
+          <Page key={data.uuid} data={data}/>
         ))}
       </div>
-    )
+    );
   }
 }
 

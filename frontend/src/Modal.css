@@ -1,0 +1,26 @@
+.Modal {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(0, 0, 0, 0.3);
+  padding: 4em 0;
+}
+
+.Modal-content {
+  background-color: #fff;
+  border-radius: 3px;
+  max-width: 700px;
+  min-height: 30em;
+  margin: 0 auto;
+  padding: 1.5em;
+}
+
+.Modal-close {
+  float: right;
+  font-size: 1.3em;
+  display: block;
+  padding: 0.5em;
+  margin: -0.5em -0.5em 1em 1em;
+}

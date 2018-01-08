@@ -1,6 +1,7 @@
 .Pagination {
   clear: both;
   padding: 1em 0;
+  text-align: center;
 }
 
 .Pagination-back, .Pagination-forward, .Pagination-current {

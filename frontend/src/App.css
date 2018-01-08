@@ -1,5 +1,4 @@
 .App {
-  text-align: center;
 }
 
 .App-logo {
@@ -13,6 +12,7 @@
   background-color: var(--primary-color);
   padding: 0.5em 0;
   font-family: 'Open Sans', sans-serif;
+  text-align: center;
 }
 
 .App-header a {

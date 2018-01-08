@@ -1,6 +1,11 @@
 .SlideResults {
-  margin: 1em 0;
+  margin: 2em 0;
   text-align: left;
+}
+
+.SlideResults-title {
+  padding: 0 0.3em;
+  margin: 1em 0;
 }
 
 .Slide {

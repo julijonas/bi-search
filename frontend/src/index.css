@@ -19,3 +19,7 @@ body {
 button, input {
   font-family: inherit;
 }
+
+a {
+  cursor: pointer;
+}

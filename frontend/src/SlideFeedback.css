@@ -1,21 +1,26 @@
 .SlideFeedback {
-  margin: 1em 0;
+  margin: 1em 0.3em;
+  padding: 1em;
+  background: #e1e1e1;
+}
+
+.SlideFeedback-items {
   display: flex;
   align-items: center;
+  margin-top: 1em;
 }
 
 .SlideFeedback-terms, .SlideFeedback-update {
-  margin-left: 0.3em;
-  background: #fff;
   display: inline-block;
   min-height: 3rem;
+  background: transparent;
 }
 
 .SlideFeedback-terms {
   border: 1px solid var(--primary-color);
   font-size: 0.8em;
   flex: 1;
-  padding: 0.2em 0;
+  padding: 0.2em;
 }
 
 .Term {
@@ -43,7 +48,7 @@
   border: 1px solid var(--secondary-color);
   font-size: 1.3em;
   cursor: pointer;
-  margin-right: 0.3em;
+  margin-left: 0.3em;
 }
 
 .SlideFeedback-update:hover {

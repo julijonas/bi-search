@@ -1,4 +1,6 @@
 import React from 'react';
+import Modal from "./Modal";
+import {NewTabLink} from "./util";
 import './SearchBox.css';
 
 
@@ -57,6 +59,7 @@ class SearchBox extends React.Component {
     super(props);
     this.state = {
       offer: offers[Math.floor(Math.random() * offers.length)],
+      smartInfoShown: false,
     };
   }
 
@@ -79,6 +82,14 @@ class SearchBox extends React.Component {
     this.props.onChange({smart}, true);
   };
 
+  showSmartInfo = () => {
+    this.setState({smartInfoShown: true});
+  };
+
+  hideSmartInfo = () => {
+    this.setState({smartInfoShown: false});
+  };
+
   render() {
     const {query, smart} = this.props;
     return (
@@ -91,10 +102,18 @@ class SearchBox extends React.Component {
           <button className="SearchBox-button" name="pages" onClick={this.handleModeChange}>Pages</button>
         </div>
         <div className="SearchBox-smart">
+          <div className="SearchBox-smart-title">Weighting scheme:</div>
           <SmartBox value={smart} options={[...smartOptions, ...smartOptions]} onChange={this.handleSmartChange} />
-          <a className="SearchBox-smart-info" title="What's this?"
-             href="https://en.wikipedia.org/wiki/SMART_Information_Retrieval_System">?</a>
+          <button className="SearchBox-smart-info" onClick={this.showSmartInfo}>?</button>
         </div>
+        <Modal show={this.state.smartInfoShown} onClose={this.hideSmartInfo}>
+          <h2>SMART weighting schemes</h2>
+          <p>
+            See also Wikipedia entries on <NewTabLink href="https://en.wikipedia.org/wiki/SMART_Information_Retrieval_System">
+            SMART Information Retrieval System</NewTabLink> and <NewTabLink href="https://en.wikipedia.org/wiki/Relevance_feedback">
+            relevance feedback</NewTabLink>.
+          </p>
+        </Modal>
       </div>
     )
   }

@@ -1,14 +1,21 @@
 .SearchBox {
-
 }
 
 .SearchBox-params {
-  margin: 1em 0;
+  margin: 2em 0;
   display: flex;
 }
 
 .SearchBox-smart {
-  margin: 1em 0;
+  margin: 2em 0;
+  padding: 0 0.3em;
+  text-align: center;
+}
+
+.SearchBox-smart-title {
+  position: absolute;
+  float: left;
+  line-height: 1.9em;
 }
 
 .SmartLetter-select, .SearchBox-smart-info {
@@ -21,7 +28,7 @@
 .SearchBox-smart-info {
   cursor: help;
   text-decoration: none;
-  margin: 0 0.6em 0 1em;
+  margin: 0 0.6em 0 2em;
   display: inline-block;
   padding: 0 0.8em;
   line-height: 2.35em;
