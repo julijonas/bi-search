@@ -19,7 +19,7 @@
 
 .Page-title {
   color: #00008B;
-  font-size: 1.2em;
+  font-size: 1.1em;
   margin-top: 0.6em;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -28,6 +28,7 @@
 }
 
 .Page-content {
+  font-size: 0.8em;
   margin: 0.3em 0 0.6em 0;
   text-overflow: ellipsis;
   color: var(--content-text-color);
@@ -40,6 +41,7 @@
 }
 
 .Page-url {
+  font-size: 0.9em;
   color: #008000;
   text-overflow: ellipsis;
   white-space: nowrap;

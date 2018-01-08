@@ -128,7 +128,7 @@ class SearchBox extends React.Component {
             Then you can observe the impact that each option has on the results.
           </p>
           <p>
-            SMART is in form <code>ddd.qqq</code>.
+            The SMART notation is in form <code>ddd.qqq</code>.
             The first three letters represent the term weighting of the document vector and the second three letters
             represent the term weighting for the query vector.
             The following options are available:
