@@ -128,9 +128,17 @@ class SearchBox extends React.Component {
             Then you can observe the impact that each option has on the results.
           </p>
           <p>
+            SMART is in form <code>ddd.qqq</code>.
+            The first three letters represent the term weighting of the document vector and the second three letters
+            represent the term weighting for the query vector.
             The following options are available:
           </p>
           <img src={smartTable} alt="Table of supported weighting options"/>
+          <p>
+            For example, you can choose natural (<code>n</code>) for document term frequency weighting, which is the
+            first letter. Then observe that page search results contain documents that have only one of several
+            query terms matching as indicated by the <q>Missing</q> notices.
+          </p>
           <p>
             See also Wikipedia entries on <NewTabLink href="https://en.wikipedia.org/wiki/SMART_Information_Retrieval_System">
             SMART Information Retrieval System</NewTabLink> and <NewTabLink href="https://en.wikipedia.org/wiki/Relevance_feedback">
