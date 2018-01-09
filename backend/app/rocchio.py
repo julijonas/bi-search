@@ -27,8 +27,8 @@ def feedback_terms(query, docs, smart):
 
     # Fill numpy query vector from list of term scores
     query_vec = np.zeros((slides_index[:,:].shape[1]))
-    for i, value in enumerate(index.score_query(query_tokens, smart[3:])[0]):
-        query_vec[query_nums[i]] = value
+    for token, value in index.score_query(query_tokens, smart[3:])[1]:
+        query_vec[slides_index.toks_to_nums(token)] = value
 
     # Get related document vectors from index
     rel_doc_vec = slides_index[docs,:]
