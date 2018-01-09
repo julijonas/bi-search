@@ -5,7 +5,6 @@ import './SearchBox.css';
 import smartTable from "./smartTable.png";
 
 
-
 const SmartLetter = ({name, value, options, onChange}) => (
   <span className="SmartLetter">
     <select className="SmartLetter-select" name={name} onChange={onChange} value={value}>

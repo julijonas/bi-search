@@ -58,7 +58,8 @@ class App extends React.Component {
   }
 
   handleParamChange = (params, performQuery) => {
-    if (performQuery) {
+    const query = (params.query || this.state.query).trim();
+    if (query && performQuery) {
       params = {
         firstTime: false,
         loading: true,
@@ -70,7 +71,7 @@ class App extends React.Component {
         pageCount: 0,
         resultCount: 0,
         ...params,
-        query: (params.query || this.state.query).trim()};
+        query};
       const state = {...this.state, ...params};
       this.fetchResults(state);
       this.updateTitle(state);
@@ -89,7 +90,8 @@ class App extends React.Component {
     this.setState(changes);
   }
 
-  fetchResults({mode, query, feedbackTerms, smart, page}) {
+  fetchResults(params) {
+    const {mode, query, feedbackTerms, smart, page} = params;
     fetch(`${backendUrl}search/${mode}`, {
       method: 'POST',
       headers: {
@@ -104,7 +106,9 @@ class App extends React.Component {
     }).then((res) => {
       return res.json();
     }).then((results) => {
-      this.updateState({...results, loading: false});
+      if (this.state.loading) {
+        this.updateState({...params, ...results, loading: false});
+      }
     }).catch(e => {
       console.error("Failed: ", e);
     });
