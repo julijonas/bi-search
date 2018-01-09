@@ -2,6 +2,7 @@ import React from 'react';
 import logo from './logo.svg';
 import './App.css';
 import SearchBox from './SearchBox';
+import ResultsOverview from './ResultsOverview';
 import PageResults from './PageResults';
 import SlideFeedback from './SlideFeedback';
 import SlideResults from './SlideResults';
@@ -160,13 +161,13 @@ class App extends React.Component {
 
   render() {
     const {loading, firstTime, mode, query, feedbackTerms, smart,
-      results, selected, page, pageCount, queryWeights} = this.state;
+      results, selected, page, pageCount, resultCount, queryWeights} = this.state;
 
     let content;
 
     if (loading) {
       content = (
-        <div class="App-loader">Loading</div>
+        <div className="App-loader">Loading</div>
       )
     } else if (!firstTime) {
       if (results.length) {
@@ -174,23 +175,25 @@ class App extends React.Component {
         if (mode === 'slides') {
 
           content = (
-            <div>
+            <React.Fragment>
               {feedbackTerms.length ? (
                 <SlideFeedback terms={feedbackTerms}
                                onUpdate={this.handleFeedbackUpdate} onRemove={this.handleTermRemove}/>
               ) : null}
+              <ResultsOverview page={page} resultCount={resultCount} weights={queryWeights}/>
               <SlideResults results={results} selected={selected} onSelect={this.handleSlideSelect}/>
               <Pagination page={page} pageCount={pageCount} onChange={this.handleParamChange}/>
-            </div>
+            </React.Fragment>
           );
 
         } else {
 
           content = (
-            <div>
+            <React.Fragment>
+              <ResultsOverview page={page} resultCount={resultCount} weights={queryWeights}/>
               <PageResults results={results} queryWeights={queryWeights}/>
               <Pagination page={page} pageCount={pageCount} onChange={this.handleParamChange}/>
-            </div>
+            </React.Fragment>
           );
 
         }

@@ -8,12 +8,22 @@ export default class Modal extends React.Component {
     }
   };
 
-  render() {
-    const {show, onClose, children} = this.props;
-
-    if (!show) {
-      return null;
+  handleEsc = ({key}) => {
+    if (key === "Escape") {
+      this.props.onClose();
     }
+  };
+
+  componentDidMount(){
+    document.addEventListener("keydown", this.handleEsc);
+  }
+
+  componentWillUnmount(){
+    document.removeEventListener("keydown", this.handleEsc);
+  }
+
+  render() {
+    const {onClose, children} = this.props;
 
     return (
       <div className="Modal" onClick={this.handleClose}

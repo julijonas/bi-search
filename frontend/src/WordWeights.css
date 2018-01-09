@@ -7,19 +7,12 @@
   padding: 0.5em;
 }
 
-.WordScorePanel {
-  margin-bottom: 1.5em;
+.WordWeights {
 }
 
-.WordScorePanel-missing {
-  color: #808080;
-  font-size: 0.8em;
-}
-
-.WordScorePanel-toggle {
+.WordWeights-toggle {
   text-decoration: underline;
   color: var(--primary-color);
   font-size: 0.8em;
   display: inline-block;
-  margin-top: 0.5em;
 }

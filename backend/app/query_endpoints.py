@@ -23,6 +23,7 @@ def get_items(collection, page):
 }))
 def search_pages_post():
     scores, q_weights = search_query(pages_index, g.data['query'], g.data['smart'])
+    result_count = len(scores)
 
     results = [
         dict(
@@ -37,7 +38,8 @@ def search_pages_post():
     ]
 
     return dict(
-        pageCount=page_count(len(scores)),
+        resultCount=result_count,
+        pageCount=page_count(result_count),
         queryWeights=q_weights,
         results=results,
     )
@@ -50,18 +52,22 @@ def search_pages_post():
 }))
 def search_slides_post():
     scores, q_weights = search_query(slides_index, g.data['query'], g.data['smart'])
+    result_count = len(scores)
 
     results = [
-       dict(
-           uuid=uuid,
-           score=score,
-           url=slides_index.get_url(uuid),
-       )
-       for score, uuid, d_weights in get_items(scores, g.data['page'])
+        dict(
+            uuid=uuid,
+            tfidf=d_weights,
+            score=score,
+            url=slides_index.get_url(uuid),
+        )
+        for score, uuid, d_weights in get_items(scores, g.data['page'])
     ]
 
     return dict(
-        pageCount=page_count(len(scores)),
+        resultCount=result_count,
+        pageCount=page_count(result_count),
+        queryWeights=q_weights,
         results=results,
     )
 
