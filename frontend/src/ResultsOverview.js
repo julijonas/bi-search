@@ -10,7 +10,7 @@ class ResultsOverview extends React.Component {
     return (
       <div className="ResultsOverview">
         <div className="ResultsOverview-count">
-          {page === 0 ? 'A' : `Page ${page + 1} of a`}bout {resultCount.toLocaleString()} results
+          {page > 0 ? `Page ${page + 1} of`: null} {resultCount.toLocaleString()} result{resultCount > 1 ? 's' : null}
         </div>
         <MissingTokens description="Tokens not in index" weights={weights}/>
         <WordWeights weights={weights} description="overall TF-IDF weights" isOpened={false} />
