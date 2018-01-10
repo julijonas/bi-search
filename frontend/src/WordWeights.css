@@ -1,0 +1,18 @@
+.WordScore {
+  background: var(--box-border-color);
+  border: 1px solid var(--primary-color);
+  text-align: right;
+  margin-bottom: -1px;
+  font-size: 0.8em;
+  padding: 0.5em;
+}
+
+.WordWeights {
+}
+
+.WordWeights-toggle {
+  text-decoration: underline;
+  color: var(--primary-color);
+  font-size: 0.8em;
+  display: inline-block;
+}

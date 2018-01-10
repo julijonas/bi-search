@@ -1,17 +1,13 @@
 .PageResults {
   margin: 1em 0;
-  text-align: left;
 }
 
 .Page {
   text-decoration: none;
   display: block;
-  margin: 0.6em 0 2em 0;
-  font-size: 0.9em;
-  display: block;
-  float: center;
   width: 100%;
   height: 100%;
+  margin: 1.5em 0;
 }
 
 .Page-link {
@@ -22,29 +18,19 @@
   height: 100%;
 }
 
-.Page-link:hover {
-  border: 2px solid var(--primary-color);
-  color: var(--primary-color);
-}
-
-.Page-score {
-  font-size: 0.8em;
-  color: #000;
-  float: right;
-}
-
 .Page-title {
   color: #00008B;
-  font-size: 1.2em;
-  margin: 0.6em 0.3em 0 0.3em;
+  font-size: 1.1em;
+  margin-top: 0.6em;
   text-overflow: ellipsis;
-  white-space:nowrap;
-  overflow:hidden;
+  white-space: nowrap;
+  overflow: hidden;
   max-width: 80%;
 }
 
 .Page-content {
-  margin: 0.3em 0.3em 0.6em 0.3em;
+  font-size: 0.8em;
+  margin: 0.3em 0 0.6em 0;
   text-overflow: ellipsis;
   color: var(--content-text-color);
   word-wrap: break-word;
@@ -56,25 +42,16 @@
 }
 
 .Page-url {
+  font-size: 0.9em;
   color: #008000;
-  margin: 0 0.3em 0 0.3em;
   text-overflow: ellipsis;
   white-space: nowrap;
   overflow: hidden;
   max-width: 80%;
 }
 
-.QueryWords {
-  margin: 0.3em 0 2em 0;
-  font-size: 1em;
-  display: block;
-  float: center;
-  width: 100%;
-  height: 100%;
-}
-
-mark {
-    background-color: transparent;
-    color: var(--content-text-color);
-    font-weight:bold;
+.Page mark {
+  background-color: transparent;
+  color: var(--content-text-color);
+  font-weight: bold;
 }

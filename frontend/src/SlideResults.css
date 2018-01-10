@@ -1,10 +1,13 @@
 .SlideResults {
-  margin: 1em 0;
-  text-align: left;
+  margin: 1em -0.3rem;
+}
+
+.SlideResults-title {
+  margin: 1em 0.3rem;
 }
 
 .Slide {
-  margin: 0.3em;
+  margin: 0.3rem;
   font-size: 0.8em;
   display: block;
   float: left;

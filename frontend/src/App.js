@@ -2,6 +2,7 @@ import React from 'react';
 import logo from './logo.svg';
 import './App.css';
 import SearchBox from './SearchBox';
+import ResultsOverview from './ResultsOverview';
 import PageResults from './PageResults';
 import SlideFeedback from './SlideFeedback';
 import SlideResults from './SlideResults';
@@ -26,15 +27,23 @@ class App extends React.Component {
 
     // Restore history.state or initialize from URL or from scratch
     this.state = window.history.state || {
-      mode: mode,
-      query: query || '',
-      feedbackTerms: [],
-      smart: 'ltclnc'.split(''),
-      // TODO backend: 'lncltc' gives zeros scores although it is recommended in slides
-      results: [],
-      selected: [],
+      // Loading flags
+      firstTime: !query,
+      loading: !!query,
+
+      // Parameters
+      mode: mode || 'slides', // Default mode
+      query: (query || '').trim(),
+      smart: 'ltclnc'.split(''), // Default smart scheme
       page: 0,
+      selected: [],
+      feedbackTerms: [],
+
+      // Results
+      results: [],
+      queryWeights: {},
       pageCount: 0,
+      resultCount: 0,
     };
 
     // Fetch results if restored from URL
@@ -49,22 +58,20 @@ class App extends React.Component {
   }
 
   handleParamChange = (params, performQuery) => {
-    if (performQuery) {
-      params = {selected: [], feedbackTerms: [], ...params,
-        query: (params.query || this.state.query).trim()};
-      const state = {...this.state, ...params};
-      this.fetchResults(state);
-      this.updateTitle(state);
-      window.history.pushState(state, '', `/${state.mode}/${state.query}`);
-    }
-    this.setState(params);
-  };
-
-  handleSearchChange = (params, performQuery) => {
-    if (performQuery) {
-      params = {selected: [], feedbackTerms: [], ...params,
-        query: (params.query || this.state.query).trim(),
-        page: 0, results: []};
+    const query = (params.query || this.state.query).trim();
+    if (query && performQuery) {
+      params = {
+        firstTime: false,
+        loading: true,
+        page: 0,
+        feedbackTerms: [],
+        selected: [],
+        results: [],
+        queryWeights: {},
+        pageCount: 0,
+        resultCount: 0,
+        ...params,
+        query};
       const state = {...this.state, ...params};
       this.fetchResults(state);
       this.updateTitle(state);
@@ -83,7 +90,8 @@ class App extends React.Component {
     this.setState(changes);
   }
 
-  fetchResults({mode, query, feedbackTerms, smart, page}) {
+  fetchResults(params) {
+    const {mode, query, feedbackTerms, smart, page} = params;
     fetch(`${backendUrl}search/${mode}`, {
       method: 'POST',
       headers: {
@@ -98,7 +106,9 @@ class App extends React.Component {
     }).then((res) => {
       return res.json();
     }).then((results) => {
-      this.updateState(results);
+      if (this.state.loading) {
+        this.updateState({...params, ...results, loading: false});
+      }
     }).catch(e => {
       console.error("Failed: ", e);
     });
@@ -143,6 +153,7 @@ class App extends React.Component {
   }
 
   handleFeedbackUpdate = () => {
+    this.setState({loading: true});
     this.fetchResults(this.state);
   };
 
@@ -153,7 +164,50 @@ class App extends React.Component {
   };
 
   render() {
-    const {mode, query, feedbackTerms, smart, results, selected, page, pageCount, queryWeights} = this.state;
+    const {loading, firstTime, mode, query, feedbackTerms, smart,
+      results, selected, page, pageCount, resultCount, queryWeights} = this.state;
+
+    let content;
+
+    if (loading) {
+      content = (
+        <div className="App-loader">Loading</div>
+      )
+    } else if (!firstTime) {
+      if (results.length) {
+
+        if (mode === 'slides') {
+
+          content = (
+            <React.Fragment>
+              {feedbackTerms.length ? (
+                <SlideFeedback terms={feedbackTerms}
+                               onUpdate={this.handleFeedbackUpdate} onRemove={this.handleTermRemove}/>
+              ) : null}
+              <ResultsOverview page={page} resultCount={resultCount} weights={queryWeights}/>
+              <SlideResults results={results} selected={selected} onSelect={this.handleSlideSelect}/>
+              <Pagination page={page} pageCount={pageCount} onChange={this.handleParamChange}/>
+            </React.Fragment>
+          );
+
+        } else {
+
+          content = (
+            <React.Fragment>
+              <ResultsOverview page={page} resultCount={resultCount} weights={queryWeights}/>
+              <PageResults results={results} queryWeights={queryWeights}/>
+              <Pagination page={page} pageCount={pageCount} onChange={this.handleParamChange}/>
+            </React.Fragment>
+          );
+
+        }
+      } else {
+        content = (
+          <h2>No results found.</h2>
+        );
+      }
+    }
+
     return (
       <div className="App">
         <header className="App-header">
@@ -163,22 +217,8 @@ class App extends React.Component {
           </a>
         </header>
         <div className="App-content">
-          <SearchBox query={query} smart={smart} onChange={this.handleSearchChange}/>
-          {results.length && mode === 'slides' ? (
-            <div>
-              {feedbackTerms.length ? (
-                <SlideFeedback terms={feedbackTerms}
-                               onUpdate={this.handleFeedbackUpdate} onRemove={this.handleTermRemove}/>
-              ) : null}
-              <SlideResults results={results} selected={selected} onSelect={this.handleSlideSelect}/>
-              <Pagination page={page} pageCount={pageCount} onChange={this.handleParamChange}/>
-            </div>
-          ) : results.length && mode === 'pages' ? (
-              <div>
-                <PageResults results={results} queryWeights={queryWeights}/>
-                <Pagination page={page} pageCount={pageCount} onChange={this.handleParamChange}/>
-              </div>
-            ) : null }
+          <SearchBox query={query} smart={smart} mode={mode} onChange={this.handleParamChange}/>
+          {content}
         </div>
       </div>
     );

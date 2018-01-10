@@ -21,12 +21,17 @@ class SlideFeedback extends React.Component {
     const {terms, onUpdate} = this.props;
     return (
       <div className="SlideFeedback">
-        <div className="SlideFeedback-terms">
-          {terms.map(({term, weight}, index) => (
-            <Term key={term} index={index} term={term} weight={weight} onRemove={this.onRemove} />
-          ))}
+        <div className="SlideFeedback-title">
+          Now you can remove unnecessary tokens and update your query:
         </div>
-        <button className="SlideFeedback-update" onClick={onUpdate}>Update</button>
+        <div className="SlideFeedback-items">
+          <div className="SlideFeedback-terms">
+            {terms.map(({term, weight}, index) => (
+              <Term key={term} index={index} term={term} weight={weight} onRemove={this.onRemove} />
+            ))}
+          </div>
+          <button className="SlideFeedback-update" onClick={onUpdate}>Update</button>
+        </div>
       </div>
     );
   }

@@ -1,7 +1,5 @@
-body {
-  margin: 0;
-  padding: 0;
-  font-family: 'Source Sans Pro', sans-serif;
+* {
+  box-sizing: border-box;
 }
 
 :root {
@@ -10,12 +8,20 @@ body {
   --secondary-light-color: #deb0e2;
   --box-border-color: #B0C4DE;
   --content-text-color: #696969;
+
+  overflow-y: scroll;
 }
 
-* {
-  box-sizing: border-box;
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Source Sans Pro', sans-serif;
 }
 
 button, input {
   font-family: inherit;
+}
+
+a {
+  cursor: pointer;
 }
