@@ -99,7 +99,8 @@ class App extends React.Component {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        query: [query, ...feedbackTerms.map(({term}) => term)].join(' '),
+        query: query,
+        tokens: feedbackTerms.map(({term}) => term),
         smart: smart.join(''),
         page: page,
       }),
@@ -180,10 +181,6 @@ class App extends React.Component {
 
           content = (
             <React.Fragment>
-              {feedbackTerms.length ? (
-                <SlideFeedback terms={feedbackTerms}
-                               onUpdate={this.handleFeedbackUpdate} onRemove={this.handleTermRemove}/>
-              ) : null}
               <ResultsOverview page={page} resultCount={resultCount} weights={queryWeights}/>
               <SlideResults results={results} selected={selected} onSelect={this.handleSlideSelect}/>
               <Pagination page={page} pageCount={pageCount} onChange={this.handleParamChange}/>
@@ -218,6 +215,10 @@ class App extends React.Component {
         </header>
         <div className="App-content">
           <SearchBox query={query} smart={smart} mode={mode} onChange={this.handleParamChange}/>
+          {feedbackTerms.length ? (
+            <SlideFeedback terms={feedbackTerms}
+                           onUpdate={this.handleFeedbackUpdate} onRemove={this.handleTermRemove}/>
+          ) : null}
           {content}
         </div>
       </div>
@@ -226,4 +227,3 @@ class App extends React.Component {
 }
 
 export default App;
-

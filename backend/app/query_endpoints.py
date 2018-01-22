@@ -3,6 +3,7 @@ from .rocchio import feedback_terms
 from .tfidf import search_query
 from .inverted_index import slides_index, pages_index
 from . import get_preview
+from tools.ttdstokenizer import pattern as token_pattern
 
 
 RESULTS_PER_PAGE = 18
@@ -47,11 +48,12 @@ def search_pages_post():
 
 @Handler('/search/slides', methods=['POST'], data_schema=Schema(cast=dict, schema={
     'query': Schema(cast=str, length=(3, 100)),
+    'tokens': Schema(cast=list, length=(0, 50), schema=Schema(cast=str, regex=token_pattern)),
     'smart': SMART_SCHEMA,
     'page': Schema(cast=int, bounds=(0, 100))
 }))
 def search_slides_post():
-    scores, q_weights = search_query(slides_index, g.data['query'], g.data['smart'])
+    scores, q_weights = search_query(slides_index, g.data['query'], g.data['smart'], g.data['tokens'])
     result_count = len(scores)
 
     results = [

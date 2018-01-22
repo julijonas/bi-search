@@ -181,17 +181,18 @@ class TFIDFQuery:
 
         return 1. * documents_tf_idf / norm
 
-    def ranked_search_cos(self, term, SMART="ltclnc"):
+    def ranked_search_cos(self, terms, tokens, SMART="ltclnc"):
 
         """
         Returns ranked documents and relevant weights
-        :param term: Search string
+        :param terms: Search string
+        :param tokens: List of already tokenized tokens
         :param SMART: eg. ltcLnc
         :return: list of ranings , (query_weights , document_weights)
         """
 
         # Tokenize query
-        query_terms = list(tokenize(term, True))
+        query_terms = list(tokenize(terms, True)) + tokens
 
         if len(query_terms) == 0:
             # Return with words that pass the stemming but are not in the index
@@ -280,9 +281,12 @@ def tfidf_test_instance(json):
     return i, inputs
 
 
-def search_query(index, query, smart):
-    proximity_index = TFIDFQuery(index)
-    scores, (q_weights, d_weights) = proximity_index.ranked_search_cos(query, smart)
+def search_query(index, query, smart, tokens=None):
+    if tokens is None:
+        tokens = []
+
+    tfidf_query = TFIDFQuery(index)
+    scores, (q_weights, d_weights) = tfidf_query.ranked_search_cos(query, tokens, smart)
 
     scores = sorted(((score, uuid, d_weights[uuid]) for score, uuid in scores if score > 0), reverse=True)
     q_weights = dict(q_weights)
